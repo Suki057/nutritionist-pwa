@@ -26,12 +26,38 @@ a{color:var(--green-d);text-decoration:none}
 .appbar h1{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
 .appbar .cd{margin-top:6px;display:inline-block;background:#fff;color:var(--green-d);
   font-size:13px;font-weight:700;padding:3px 12px;border-radius:14px}
-.quick{position:sticky;top:0;z-index:15;background:#fff;border-bottom:1px solid var(--line);
-  display:flex;gap:8px;overflow-x:auto;padding:8px 12px;-webkit-overflow-scrolling:touch}
-.quick a{flex:0 0 auto;font-size:13px;background:var(--soft);color:var(--green-d);
-  padding:5px 12px;border-radius:14px;white-space:nowrap}
-.quick a.all{background:var(--green);color:#fff}
-main{padding:12px 12px 90px;max-width:760px;margin:0 auto}
+.view[hidden]{display:none}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;
+  background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);
+  box-shadow:0 -2px 10px rgba(0,0,0,.06)}
+.tabbar button{flex:1;background:none;border:none;padding:9px 0 7px;font-family:inherit;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:2px;color:#8a917f;font-size:12.5px}
+.tabbar button .ic{font-size:21px;line-height:1}
+.tabbar button.active{color:var(--green-d);font-weight:800}
+#src{display:none}
+#hb-home{padding-top:2px}
+#hb-overview{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+#hb-overview h2{font-size:18px;color:var(--green-d);margin:0 0 8px}
+.ch-group{font-size:13px;font-weight:800;color:#9a8f6a;margin:16px 4px 8px;letter-spacing:.5px}
+.ch-item{display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;
+  background:#fff;border:1px solid var(--line);border-left:6px solid var(--blue);border-radius:12px;
+  padding:13px 14px;margin-bottom:9px;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.ch-item:active{background:var(--soft)}
+.ch-item .ch-title{font-size:15.5px;font-weight:700;color:var(--ink)}
+.ch-item.lv3{border-left-color:var(--red)}.ch-item.lv2{border-left-color:var(--orange)}
+.ch-item.lv1{border-left-color:var(--blue)}
+.badge{flex:0 0 auto;font-size:11px;color:#fff;padding:2px 8px;border-radius:10px}
+.badge.lv3{background:var(--red)}.badge.lv2{background:var(--orange)}.badge.lv1{background:var(--blue)}
+#hb-detail .back{position:sticky;top:0;z-index:5;width:100%;text-align:left;background:var(--green);
+  color:#fff;border:none;font-family:inherit;font-size:15px;font-weight:700;padding:12px 14px;cursor:pointer}
+#hb-detail{padding-bottom:18px}
+#hb-detail-body{padding:12px 14px}
+#hb-detail-body h2{font-size:18px;color:var(--green-d);margin:8px 0 10px}
+#hb-detail-body h3{font-size:14.5px;color:var(--green-d);margin:14px 0 6px;border-left:4px solid var(--orange);padding-left:7px}
+#hb-detail-body ul{margin:4px 0 12px;padding-left:20px}
+#hb-detail-body li{margin:4px 0}
+#hb-detail-body blockquote{background:#fff7e6;border-left:4px solid var(--orange);margin:8px 0;padding:7px 12px;color:#7a5a2a;font-size:13px;border-radius:0 8px 8px 0}
+main{padding:12px 12px 84px;max-width:760px;margin:0 auto}
 .hero{background:linear-gradient(120deg,#1f9d6b,#2bbd86);color:#fff;border-radius:14px;
   padding:16px;margin-bottom:14px}
 .hero h2{margin:0 0 6px;font-size:19px}
@@ -61,8 +87,7 @@ details.chap[open]>summary::before{transform:rotate(90deg)}
 details.chap>:not(summary){padding:0 14px 14px}
 .badge{flex:0 0 auto;font-size:11px;color:#fff;padding:2px 8px;border-radius:10px}
 .badge.lv3{background:var(--red)}.badge.lv2{background:var(--orange)}.badge.lv1{background:var(--blue)}
-#handbook-body>h1{display:none}
-#handbook-body>h2{font-size:18px;color:var(--green-d);margin:16px 0 8px}
+/* 源内容(#src)隐藏，总览/章节详情由 JS 渲染 */
 details.chap h3{font-size:14.5px;color:var(--green-d);margin:14px 0 6px;border-left:4px solid var(--orange);padding-left:7px}
 details.chap ul{margin:4px 0 12px;padding-left:20px}
 details.chap li{margin:4px 0}
@@ -72,14 +97,9 @@ th{background:var(--soft);color:var(--green-d);border:1px solid var(--line);padd
 td{border:1px solid var(--line);padding:6px;vertical-align:top}
 tbody tr:nth-child(even){background:#faf8f1}
 hr{border:none;border-top:1px dashed var(--line);margin:8px 0}
-#installHint{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#23311f;color:#eafff0;
-  font-size:13px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:10px;
-  box-shadow:0 -2px 10px rgba(0,0,0,.25)}
-#installHint .txt{flex:1;line-height:1.5}
-#installHint button{background:var(--green);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;white-space:nowrap}
-#installHint .x{background:none;color:#9fb89f;border:none;font-size:18px;padding:0 4px}
+/* 底部“添加到桌面”提示板块已按需求删除 */
 @media print{details.chap{break-inside:avoid}}
-</style></head><body><header class="appbar"><h1>🌿 营养师三级 · 应试宝典</h1><span class="cd" id="cd">距考试 — 天</span></header><nav class="quick" id="quick"><a class="all" href="#top">顶部</a><a href="#sched">进度表</a><a href="#handbook">考点手册</a></nav><main id="top"><div class="hero"><h2>74天冲刺计划</h2><p>2026-10-13 起 · 每天 1.5–2 小时 · 三阶段法（打基础→巩固→冲刺）</p></div><div class="sect-title" id="sched">📅 备考进度表</div><p class="note">今天起到 12/26 考试共 <b>74 个学习日</b>。工作日 1.5h、周末 2h，约 120+ 小时。计划可依进度微调。</p><div class="phase">
+</style></head><body><header class="appbar"><h1>🌿 营养师三级 · 应试宝典</h1><span class="cd" id="cd">距考试 — 天</span></header><main id="top"><section id="view-progress" class="view"><div class="hero"><h2>74天冲刺计划</h2><p>2026-10-13 起 · 每天 1.5–2 小时 · 三阶段法（打基础→巩固→冲刺）</p></div><div class="sect-title" id="sched">📅 备考进度表</div><p class="note">今天起到 12/26 考试共 <b>74 个学习日</b>。工作日 1.5h、周末 2h，约 120+ 小时。计划可依进度微调。</p><div class="phase">
 <div class="phase-head"><h3>第一阶段 · 打基础（精读+理解+章节题）</h3><span class="phase-span">10/13 – 11/15（约34天）</span></div>
 <p class="phase-goal">按重要度通读9章理论，建立框架，标注高频数据，每章配套章节题。</p>
 <table class="sched"><thead><tr><th>周</th><th>日期</th><th>重点内容</th><th>关键动作</th></tr></thead><tbody>
@@ -104,7 +124,7 @@ hr{border:none;border-top:1px dashed var(--line);margin:8px 0}
 <table class="sched"><thead><tr><th>周</th><th>日期</th><th>重点内容</th><th>关键动作</th></tr></thead><tbody>
 <tr><td class="wk">第10周</td><td class="dt">12/14–12/20</td><td>技能模块5食品营养评价+模块6社区营养干预(刷题)｜理论高频错题重刷(Ch3/4/6/8)</td><td class="act">完成第1~2套模拟卷；标记薄弱章</td></tr>
 <tr><td class="wk">第11周</td><td class="dt">12/21–12/25</td><td>第3~5套模拟卷+错题本全过+背矿物质/维生素/食物/中毒速查表与口诀</td><td class="act">考前3天只看重点章+口诀；12/26上考场</td></tr>
-</tbody></table></div><div class="sect-title" id="handbook">📚 考点手册（三色笔记重整）</div><p class="note">红=必背 ★★★ ｜ 橙=重点 ★★ ｜ 蓝=一般 ★。点章节标题展开/收起。先框架→速查表→口诀→避易错。</p><div id="handbook-body"><h1 id="_1">公共营养师（三级）考试向结构化考点手册</h1>
+</tbody></table></div></section><section id="view-handbook" class="view" hidden><div id="hb-home"><div id="hb-overview"></div><div class="ch-list" id="chList"></div></div><div id="hb-detail" hidden><button class="back" id="hbBack">← 返回考点手册</button><div id="hb-detail-body"></div></div><div id="src" hidden><h1 id="_1">公共营养师（三级）考试向结构化考点手册</h1>
 <blockquote>
 <p>本手册依据三色笔记 PDF 全文（基础知识 9 章 + 技能知识 6 模块）整理，结合学习计划优先级标注重要度，供冲刺背诵与查漏补缺使用。</p>
 </blockquote>
@@ -1207,48 +1227,77 @@ hr{border:none;border-top:1px dashed var(--line);margin:8px 0}
 <hr />
 <blockquote>
 <p><strong>使用建议</strong>：本手册每章均含"核心考点 + 速查表 + 口诀 + 易错提醒"四件套，建议先按重要度（★★★优先）通读，再针对表格与口诀集中背诵，最后用易错提醒做错题归因。技能模块重点练"算"（人日数、标准人、BMI、能量公式、INQ、GI/GL）与"编"（食谱编制原则与餐次比）。</p>
-</blockquote></div></main><div id="installHint"><span class="txt">📲 添加到主屏幕：安卓点浏览器菜单→<b>安装应用</b>；iPhone 点<b>分享→添加到主屏幕</b></span><button id="instBtn" style="display:none">安装</button><button class="x" id="instX">×</button></div><script>
+</blockquote></div></section></main><nav class="tabbar" id="tabbar"><button data-view="progress" class="active"><span class="ic">📅</span>进度</button><button data-view="handbook"><span class="ic">📚</span>考点手册</button></nav><script>
 // 倒计时
 (function(){var d=new Date('2026-12-26T09:00:00');function u(){var n=new Date();var x=Math.ceil((d-n)/86400000);
 var el=document.getElementById('cd');if(el)el.textContent=x>0?('距 12-26 考试还有 '+x+' 天'):'今天考试，加油！';}
 u();setInterval(u,3600000);})();
-// 章节 -> 可折叠 details
+
+// 底部导航切换（进度 / 考点手册）
 (function(){
-  var hb=document.getElementById('handbook-body');if(!hb)return;
-  var hs=Array.prototype.slice.call(hb.querySelectorAll('h2'));
-  var chips=[];
-  hs.forEach(function(h){
-    var m=h.textContent.match(/【重要度：([★]+)】/);if(!m)return;
-    var lv=m[1].length;
-    var rawName=h.textContent.replace(/【重要度：([★]+)】/,'').replace(/^第.{1,3}章\s*/,'').trim();
-    var det=document.createElement('details');det.className='chap lv'+lv;if(lv===3)det.open=true;
-    var nodes=[h];var n=h.nextElementSibling;
-    while(n&&!n.matches('h2')){nodes.push(n);n=n.nextElementSibling;}
-    nodes.forEach(function(nd){det.appendChild(nd);});
-    h.parentNode.insertBefore(det,h);
-    h.innerHTML=h.innerHTML.replace(/【重要度：([★]+)】/,'')+'<span class="badge lv'+lv+'">'+m[1]+'</span>';
-    if(h.id)det.id=h.id;
-    var icon=lv===3?'🔴':(lv===2?'🟠':'🔵');
-    chips.push('<a href="#'+h.id+'">'+icon+rawName.slice(0,8)+'</a>');
-  });
-  var q=document.getElementById('quick');
-  chips.forEach(function(c){q.insertAdjacentHTML('beforeend',c);});
+  var tabs=document.querySelectorAll('#tabbar button');
+  tabs.forEach(function(b){b.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
+    var v=b.getAttribute('data-view');
+    document.getElementById('view-progress').hidden=(v!=='progress');
+    document.getElementById('view-handbook').hidden=(v!=='handbook');
+    window.scrollTo(0,0);
+  });});
 })();
-// 点快捷跳转时展开对应 details
-document.getElementById('quick').addEventListener('click',function(e){
-  var a=e.target.closest('a');if(!a)return;var id=a.getAttribute('href').slice(1);
-  var el=document.getElementById(id);if(el&&el.tagName==='DETAILS')el.open=true;
-});
-// Service Worker 注册（离线 + 可安装）
+
+// 考点手册：总览 + 章节列表 + 点击标题下钻详情页
+(function(){
+  var src=document.getElementById('src');if(!src)return;
+  var kids=Array.prototype.slice.call(src.children);
+  var h2s=kids.filter(function(n){return n.tagName==='H2';});
+  var ov=h2s.filter(function(h){return /总览/.test(h.textContent);})[0];
+  var chaps=h2s.filter(function(h){return /【重要度/.test(h.textContent);});
+
+  // 渲染总览（从"总览"标题到第一章之前）
+  var ovBox=document.getElementById('hb-overview');
+  if(ov&&chaps[0]){
+    var start=kids.indexOf(ov),stop=kids.indexOf(chaps[0]);
+    for(var i=start;i<stop;i++){ovBox.appendChild(kids[i].cloneNode(true));}
+  }
+
+  // 渲染章节标题列表（按 基础知识 / 技能知识 分组）
+  var list=document.getElementById('chList'),lastGroup='';
+  chaps.forEach(function(h){
+    var full=h.textContent.replace(/【重要度：([★]+)】/,'').trim();
+    var m=h.textContent.match(/【重要度：([★]+)】/);
+    var lv=m?m[1].length:1;
+    var group=/模块/.test(full)?'技能知识':'基础知识';
+    if(group!==lastGroup){var gh=document.createElement('div');gh.className='ch-group';gh.textContent=group;list.appendChild(gh);lastGroup=group;}
+    var a=document.createElement('a');a.className='ch-item lv'+lv;a.href='#';a.setAttribute('data-id',h.id);
+    a.innerHTML='<span class="ch-title">'+full+'</span><span class="badge lv'+lv+'">'+m[1]+'</span>';
+    a.addEventListener('click',function(e){e.preventDefault();openChapter(h.id);});
+    list.appendChild(a);
+  });
+
+  function openChapter(id){
+    var h=document.getElementById(id);if(!h)return;
+    var body=document.getElementById('hb-detail-body');body.innerHTML='';
+    var n=h;
+    while(n){
+      body.appendChild(n.cloneNode(true));
+      n=n.nextElementSibling;
+      if(n&&(n.tagName==='H2'||n.tagName==='H1'))break;
+    }
+    var ch2=body.querySelector('h2');
+    if(ch2)ch2.innerHTML=ch2.innerHTML.replace(/【重要度：([★]+)】/,'');
+    document.getElementById('hb-home').style.display='none';
+    document.getElementById('hb-detail').hidden=false;
+    window.scrollTo(0,0);
+  }
+  document.getElementById('hbBack').addEventListener('click',function(){
+    document.getElementById('hb-detail').hidden=true;
+    document.getElementById('hb-home').style.display='';
+    window.scrollTo(0,0);
+  });
+})();
+
+// Service Worker 注册（离线可用）
 if('serviceWorker' in navigator){window.addEventListener('load',function(){
   navigator.serviceWorker.register('sw.js').catch(function(){});});}
-// 安装提示
-var deferred=null;
-window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;
-  document.getElementById('instBtn').style.display='block';});
-document.getElementById('instBtn').addEventListener('click',function(){
-  if(!deferred)return;deferred.prompt();deferred.userChoice.then(function(){deferred=null;
-  document.getElementById('instBtn').style.display='none';});});
-document.getElementById('instX').addEventListener('click',function(){
-  document.getElementById('installHint').style.display='none';});
 </script></body></html>
