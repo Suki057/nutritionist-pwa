@@ -1336,7 +1336,7 @@ hr{border:none;border-top:1px dashed var(--line);margin:8px 0}
 <section id="view-quiz" class="view" hidden>
   <div class="quiz-head">
     <h2>🧠 随机试题</h2>
-    <p class="quiz-sub">基础+技能知识点 · 每次 50 题（单选20+多选20+判断10）· 4 组轮完 200 题自动重排</p>
+    <p class="quiz-sub">基础+技能知识点 · 每次 50 题（单选20+多选20+判断10）· 多轮循环，全部轮完自动重排</p>
     <div class="quiz-bar">
       <span id="quiz-progress" class="quiz-stat">已答 0 / 50</span>
       <span id="quiz-score" class="quiz-stat">得分 0</span>
@@ -1611,7 +1611,7 @@ u();setInterval(u,3600000);})();
 (function(){
   var BANK=null, pending=false;
   var BATCH={single:20, multi:20, judge:10};   // 每批 50 题
-  var TOTAL_ROUNDS=4;                           // 4 组轮完 200 题
+  var TOTAL_ROUNDS=4;                           // 轮数按题库大小动态计算（数据加载后覆盖）
   var WRONG_PAGE=50;                            // 错题集每次显示 50 题
   var SKEY='nutri_quiz_session', WKEY='nutri_wrong';
   var seeded=false;
@@ -1675,10 +1675,16 @@ u();setInterval(u,3600000);})();
     }
     return {order:buildOrder(), round:0};
   }
+  // 从循环数组取连续 n 个（不足则回绕），保证每页三类各足量且无页内重复
+  function sliceCycle(arr, start, n){
+    var out=[];
+    for(var k=0;k<n;k++){ out.push(arr[(start+k)%arr.length]); }
+    return out;
+  }
   function batchOf(order, round){
-    var s=order.single.slice(round*BATCH.single,(round+1)*BATCH.single);
-    var m=order.multi.slice(round*BATCH.multi,(round+1)*BATCH.multi);
-    var j=order.judge.slice(round*BATCH.judge,(round+1)*BATCH.judge);
+    var s=sliceCycle(order.single, round*BATCH.single, BATCH.single);
+    var m=sliceCycle(order.multi,  round*BATCH.multi,  BATCH.multi);
+    var j=sliceCycle(order.judge,  round*BATCH.judge,  BATCH.judge);
     return shuffle(s.concat(m).concat(j));   // 三类题之间顺序打乱，各自内部顺序固定
   }
 
@@ -1825,6 +1831,12 @@ u();setInterval(u,3600000);})();
   // ---------- 数据加载 ----------
   fetch('quiz_data.json').then(function(r){return r.json();}).then(function(d){
     BANK=d;
+    // 轮数按题库大小动态计算：保证三类题各自都能在 TOTAL_ROUNDS 组内轮完
+    TOTAL_ROUNDS=Math.max(
+      Math.ceil(BANK.single.length/BATCH.single),
+      Math.ceil(BANK.multi.length/BATCH.multi),
+      Math.ceil(BANK.judge.length/BATCH.judge)
+    );
     updateWrongBadge();
     if(!seeded){
       seeded=true;
@@ -1927,7 +1939,13 @@ u();setInterval(u,3600000);})();
   });
 })();
 
-// Service Worker 注册（离线可用）
+// Service Worker 注册（离线可用）+ 新版本自动刷新
 if('serviceWorker' in navigator){window.addEventListener('load',function(){
-  navigator.serviceWorker.register('sw.js').catch(function(){});});}
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+  // 当新版本 Service Worker 接管页面时，自动刷新以加载最新内容（根治“推送了却看不到更新”）
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+    if(window.__swReloaded) return;
+    window.__swReloaded=true; location.reload();
+  });
+});}
 </script></body></html>
