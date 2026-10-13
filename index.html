@@ -1527,6 +1527,74 @@ u();setInterval(u,3600000);})();
   }).catch(function(e){console.warn('notes_data.json 加载失败',e);});
 })();
 
+// 左滑返回上一屏（移动端手势）
+(function(){
+  var TAB_ORDER=['progress','handbook','basic','skill'];
+  function activeView(){
+    for(var i=0;i<TAB_ORDER.length;i++){
+      var el=document.getElementById('view-'+TAB_ORDER[i]);
+      if(el && !el.hidden) return TAB_ORDER[i];
+    }
+    return 'progress';
+  }
+  function showTab(id){
+    var bar=document.getElementById('tabbar');
+    if(!bar) return;
+    var btns=bar.querySelectorAll('button');
+    for(var i=0;i<btns.length;i++){
+      if(btns[i].getAttribute('data-view')===id){btns[i].click();break;}
+    }
+  }
+  function prevTab(v){
+    var idx=TAB_ORDER.indexOf(v);
+    if(idx>0) showTab(TAB_ORDER[idx-1]);
+  }
+  function goBack(){
+    var v=activeView();
+    if(v==='basic'){
+      var con=document.getElementById('bk-basic-content');
+      var sec=document.getElementById('bk-basic-sections');
+      var home=document.getElementById('bk-basic-home');
+      if(!con.hidden){con.hidden=true;sec.hidden=false;window.scrollTo(0,0);return;}
+      if(!sec.hidden){home.style.display='';sec.hidden=true;con.hidden=true;window.scrollTo(0,0);return;}
+      prevTab(v);return;
+    }
+    if(v==='skill'){
+      var scon=document.getElementById('bk-skill-content');
+      var sunits=document.getElementById('bk-skill-units');
+      var shome=document.getElementById('bk-skill-home');
+      if(!scon.hidden){scon.hidden=true;sunits.hidden=false;window.scrollTo(0,0);return;}
+      if(!sunits.hidden){shome.style.display='';sunits.hidden=true;scon.hidden=true;window.scrollTo(0,0);return;}
+      prevTab(v);return;
+    }
+    if(v==='handbook'){
+      var det=document.getElementById('hb-detail');
+      if(!det.hidden){det.hidden=true;document.getElementById('hb-home').style.display='';window.scrollTo(0,0);return;}
+      prevTab(v);return;
+    }
+    prevTab(v); // progress 单屏
+  }
+  // 手势：记录起点，判定左滑（水平位移主导、向右→左；表格内横向滚动不触发返回）
+  var sx=0,sy=0,tracking=false,blocked=false;
+  document.addEventListener('touchstart',function(e){
+    if(e.touches.length!==1){tracking=false;return;}
+    blocked=!!(e.target.closest && e.target.closest('.tbl-wrap'));
+    sx=e.touches[0].clientX;sy=e.touches[0].clientY;tracking=true;
+  },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(!tracking||blocked)return;tracking=false;
+    var t=e.changedTouches[0];
+    var dx=t.clientX-sx, dy=t.clientY-sy;
+    if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)*1.5 && dx<0) goBack();
+  },{passive:true});
+  // 桌面预览可用 ← 方向键返回，方便验证（移动端不受影响）
+  document.addEventListener('keydown',function(e){
+    var tag=(e.target&&e.target.tagName)||'';
+    if(tag==='INPUT'||tag==='TEXTAREA')return;
+    if(e.key==='ArrowLeft') goBack();
+  });
+})();
+
 // Service Worker 注册（离线可用）
 if('serviceWorker' in navigator){window.addEventListener('load',function(){
   navigator.serviceWorker.register('sw.js').catch(function(){});});}
