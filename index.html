@@ -99,6 +99,25 @@ tbody tr:nth-child(even){background:#faf8f1}
 hr{border:none;border-top:1px dashed var(--line);margin:8px 0}
 /* 底部“添加到桌面”提示板块已按需求删除 */
 @media print{details.chap{break-inside:avoid}}
+/* ===== 完整笔记 基础/技能 三级下钻 ===== */
+.bk-list{margin-top:6px}
+.ch-item.plain{border-left-color:var(--line)}
+#bk-basic-sections h2,#bk-skill-units h2{font-size:18px;color:var(--green-d);margin:4px 2px 10px}
+#bk-basic-content h3,#bk-skill-content h3{font-size:16px;color:var(--green-d);margin:4px 2px 10px;line-height:1.4}
+.back{display:inline-block;margin:2px 0 12px;background:var(--soft);color:var(--green-d);border:none;
+  border-radius:18px;padding:7px 14px;font-size:13px;font-family:inherit;cursor:pointer;font-weight:700}
+.pc-group{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:12px 0;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.pc-title{font-size:14px;font-weight:800;color:#9a8f6a;margin:2px 0 8px;letter-spacing:.3px}
+.pc-intro{margin:0 0 8px}
+/* 笔记正文排版（宽松、不挤） */
+.note{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.note .para{margin:0 0 14px;line-height:1.9;font-size:15px;color:#2f3327;text-align:justify}
+.note .para:last-child{margin-bottom:0}
+.note h4.ol1{margin:18px 0 8px;font-size:15.5px;color:var(--red);border-left:4px solid var(--red);padding-left:8px}
+.note p.ol2{margin:12px 0 6px;font-weight:800;color:var(--orange);font-size:14.5px}
+.note p.li{margin:8px 0;line-height:1.85;font-size:14.5px;color:#2f3327}
+.note p.li.num b{color:var(--green-d);margin-right:4px}
+.note p.li.cir{margin:6px 0 6px 6px;padding-left:4px;line-height:1.8;font-size:14px;color:#444}
 </style></head><body><header class="appbar"><h1>🌿 营养师三级 · 应试宝典</h1><span class="cd" id="cd">距考试 — 天</span></header><main id="top"><section id="view-progress" class="view"><div class="hero"><h2>74天冲刺计划</h2><p>2026-10-13 起 · 每天 1.5–2 小时 · 三阶段法（打基础→巩固→冲刺）</p></div><div class="sect-title" id="sched">📅 备考进度表</div><p class="note">今天起到 12/26 考试共 <b>74 个学习日</b>。工作日 1.5h、周末 2h，约 120+ 小时。计划可依进度微调。</p><div class="phase">
 <div class="phase-head"><h3>第一阶段 · 打基础（精读+理解+章节题）</h3><span class="phase-span">10/13 – 11/15（约34天）</span></div>
 <p class="phase-goal">按重要度通读9章理论，建立框架，标注高频数据，每章配套章节题。</p>
@@ -1227,7 +1246,33 @@ hr{border:none;border-top:1px dashed var(--line);margin:8px 0}
 <hr />
 <blockquote>
 <p><strong>使用建议</strong>：本手册每章均含"核心考点 + 速查表 + 口诀 + 易错提醒"四件套，建议先按重要度（★★★优先）通读，再针对表格与口诀集中背诵，最后用易错提醒做错题归因。技能模块重点练"算"（人日数、标准人、BMI、能量公式、INQ、GI/GL）与"编"（食谱编制原则与餐次比）。</p>
-</blockquote></div></section></main><nav class="tabbar" id="tabbar"><button data-view="progress" class="active"><span class="ic">📅</span>进度</button><button data-view="handbook"><span class="ic">📚</span>考点手册</button></nav><script>
+</blockquote></div></section><section id="view-basic" class="view" hidden>
+  <div id="bk-basic-home"><div class="bk-list" id="bk-basic-chapters"></div></div>
+  <div id="bk-basic-sections" hidden>
+    <button class="back" id="bk-basic-back1">← 返回章列表</button>
+    <h2 id="bk-basic-ch-title"></h2>
+    <div class="bk-list" id="bk-basic-section-list"></div>
+  </div>
+  <div id="bk-basic-content" hidden>
+    <button class="back" id="bk-basic-back2">← 返回节列表</button>
+    <h3 id="bk-basic-sec-title"></h3>
+    <div class="note" id="bk-basic-note"></div>
+  </div>
+</section>
+<section id="view-skill" class="view" hidden>
+  <div id="bk-skill-home"><div class="bk-list" id="bk-skill-modules"></div></div>
+  <div id="bk-skill-units" hidden>
+    <button class="back" id="bk-skill-back1">← 返回模块列表</button>
+    <h2 id="bk-skill-m-title"></h2>
+    <div id="bk-skill-group-list"></div>
+  </div>
+  <div id="bk-skill-content" hidden>
+    <button class="back" id="bk-skill-back2">← 返回单元列表</button>
+    <h3 id="bk-skill-u-title"></h3>
+    <div class="note" id="bk-skill-note"></div>
+  </div>
+</section>
+</main><nav class="tabbar" id="tabbar"><button data-view="progress" class="active"><span class="ic">📅</span>进度</button><button data-view="handbook"><span class="ic">📚</span>考点手册</button><button data-view="basic"><span class="ic">📖</span>基础</button><button data-view="skill"><span class="ic">🛠</span>技能</button></nav><script>
 // 倒计时
 (function(){var d=new Date('2026-12-26T09:00:00');function u(){var n=new Date();var x=Math.ceil((d-n)/86400000);
 var el=document.getElementById('cd');if(el)el.textContent=x>0?('距 12-26 考试还有 '+x+' 天'):'今天考试，加油！';}
@@ -1240,8 +1285,11 @@ u();setInterval(u,3600000);})();
     tabs.forEach(function(x){x.classList.remove('active');});
     b.classList.add('active');
     var v=b.getAttribute('data-view');
-    document.getElementById('view-progress').hidden=(v!=='progress');
-    document.getElementById('view-handbook').hidden=(v!=='handbook');
+    ['progress','handbook','basic','skill'].forEach(function(id){
+      document.getElementById('view-'+id).hidden=(v!==id);
+    });
+    if(v==='basic'){var bh=document.getElementById('bk-basic-home');if(bh){bh.style.display='';document.getElementById('bk-basic-sections').hidden=true;document.getElementById('bk-basic-content').hidden=true;}}
+    if(v==='skill'){var sh=document.getElementById('bk-skill-home');if(sh){sh.style.display='';document.getElementById('bk-skill-units').hidden=true;document.getElementById('bk-skill-content').hidden=true;}}
     window.scrollTo(0,0);
   });});
 })();
@@ -1295,6 +1343,119 @@ u();setInterval(u,3600000);})();
     document.getElementById('hb-home').style.display='';
     window.scrollTo(0,0);
   });
+})();
+
+// 完整笔记（基础知识 + 技能知识）三级下钻渲染
+(function(){
+  var LVB={1:1,2:2,3:3,4:3,5:3,6:3,7:3,8:3,9:1};
+  var LVS={1:3,2:3,3:3,4:3,5:2,6:2};
+  function stars(n){return n===3?'★★★':n===2?'★★':'★';}
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function fmtNote(txt){
+    if(!txt) return '<p class="para">（本节暂无正文）</p>';
+    var lines=txt.split('\n').map(function(s){return s.trim();}).filter(function(s){return s!=='';});
+    var HL=/^([一二三四五六七八九十]+、|（[一二三四五六七八九十]+）|[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭]|\d+\.)/;
+    var h='';var i=0;
+    while(i<lines.length){
+      var b=lines[i];
+      if(/^[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭]/.test(b)){h+='<p class="li cir">'+esc(b)+'</p>';i++;continue;}
+      if(/^（[一二三四五六七八九十]+）/.test(b)){h+='<p class="ol2">'+esc(b)+'</p>';i++;continue;}
+      if(/^[一二三四五六七八九十]+、/.test(b)){h+='<h4 class="ol1">'+esc(b)+'</h4>';i++;continue;}
+      var m=b.match(/^(\d+\.)\s*(.*)$/);
+      if(m){
+        var rest=m[2];var j=i+1;
+        while(j<lines.length&&!HL.test(lines[j])){rest+=' '+lines[j];j++;}
+        h+='<p class="li num"><b>'+esc(m[1])+'</b> '+esc(rest)+'</p>';i=j;continue;
+      }
+      var para=b;var j=i+1;
+      while(j<lines.length&&!HL.test(lines[j])){para+=' '+lines[j];j++;}
+      h+='<p class="para">'+esc(para)+'</p>';i=j;
+    }
+    return h;
+  }
+  var bHome=document.getElementById('bk-basic-home'),
+      bSec=document.getElementById('bk-basic-sections'),
+      bCon=document.getElementById('bk-basic-content'),
+      bChapters=document.getElementById('bk-basic-chapters');
+  var sHome=document.getElementById('bk-skill-home'),
+      sUnits=document.getElementById('bk-skill-units'),
+      sCon=document.getElementById('bk-skill-content'),
+      sModules=document.getElementById('bk-skill-modules');
+  var NOTES=null;
+  function showBasicHome(){bHome.style.display='';bSec.hidden=true;bCon.hidden=true;}
+  function showSkillHome(){sHome.style.display='';sUnits.hidden=true;sCon.hidden=true;}
+
+  function renderBasic(){
+    bChapters.innerHTML='';
+    NOTES['基础'].forEach(function(ch){
+      var lv=LVB[ch.no]||1;
+      var a=document.createElement('a');a.href='#';a.className='ch-item lv'+lv;
+      a.innerHTML='<span class="ch-title">第'+ch.no+'章 '+esc(ch.title)+'</span><span class="badge lv'+lv+'">'+stars(lv)+'</span>';
+      a.addEventListener('click',function(e){e.preventDefault();openChapter(ch);});
+      bChapters.appendChild(a);
+    });
+  }
+  function openChapter(ch){
+    bHome.style.display='none';bCon.hidden=true;bSec.hidden=false;
+    document.getElementById('bk-basic-ch-title').textContent='第'+ch.no+'章 '+ch.title;
+    var list=document.getElementById('bk-basic-section-list');list.innerHTML='';
+    ch.sections.forEach(function(s){
+      var lv=LVB[ch.no]||1;
+      var a=document.createElement('a');a.href='#';a.className='ch-item lv'+lv;
+      a.innerHTML='<span class="ch-title">'+esc(s.title)+'</span>';
+      a.addEventListener('click',function(e){e.preventDefault();openSection(s,ch);});
+      list.appendChild(a);
+    });
+    window.scrollTo(0,0);
+  }
+  function openSection(s,ch){
+    bSec.hidden=true;bCon.hidden=false;
+    document.getElementById('bk-basic-sec-title').textContent='第'+ch.no+'章 · '+s.title;
+    document.getElementById('bk-basic-note').innerHTML=fmtNote(s.content);
+    window.scrollTo(0,0);
+  }
+  function renderSkill(){
+    sModules.innerHTML='';
+    NOTES['技能'].forEach(function(m){
+      var lv=LVS[m.no]||2;
+      var a=document.createElement('a');a.href='#';a.className='ch-item lv'+lv;
+      a.innerHTML='<span class="ch-title">模块'+m.no+' '+esc(m.title)+'</span><span class="badge lv'+lv+'">'+stars(lv)+'</span>';
+      a.addEventListener('click',function(e){e.preventDefault();openModule(m);});
+      sModules.appendChild(a);
+    });
+  }
+  function openModule(m){
+    sHome.style.display='none';sCon.hidden=true;sUnits.hidden=false;
+    document.getElementById('bk-skill-m-title').textContent='模块'+m.no+' '+m.title;
+    var box=document.getElementById('bk-skill-group-list');box.innerHTML='';
+    m.groups.forEach(function(g){
+      var grp=document.createElement('div');grp.className='pc-group';
+      var h=document.createElement('div');h.className='pc-title';h.textContent=g.title;grp.appendChild(h);
+      if(g.intro){var ip=document.createElement('div');ip.className='pc-intro note';ip.innerHTML=fmtNote(g.intro);grp.appendChild(ip);}
+      g.units.forEach(function(u){
+        var a=document.createElement('a');a.href='#';a.className='ch-item plain';
+        a.innerHTML='<span class="ch-title">'+esc(u.title)+'</span>';
+        a.addEventListener('click',function(e){e.preventDefault();openUnit(u);});
+        grp.appendChild(a);
+      });
+      box.appendChild(grp);
+    });
+    window.scrollTo(0,0);
+  }
+  function openUnit(u){
+    sUnits.hidden=true;sCon.hidden=false;
+    document.getElementById('bk-skill-u-title').textContent=u.title;
+    document.getElementById('bk-skill-note').innerHTML=fmtNote(u.content);
+    window.scrollTo(0,0);
+  }
+  document.getElementById('bk-basic-back1').addEventListener('click',showBasicHome);
+  document.getElementById('bk-basic-back2').addEventListener('click',function(){bCon.hidden=true;bSec.hidden=false;window.scrollTo(0,0);});
+  document.getElementById('bk-skill-back1').addEventListener('click',showSkillHome);
+  document.getElementById('bk-skill-back2').addEventListener('click',function(){sCon.hidden=true;sUnits.hidden=false;window.scrollTo(0,0);});
+
+  fetch('notes_data.json').then(function(r){return r.json();}).then(function(d){
+    NOTES=d;renderBasic();renderSkill();
+  }).catch(function(e){console.warn('notes_data.json 加载失败',e);});
 })();
 
 // Service Worker 注册（离线可用）
