@@ -111,13 +111,19 @@ hr{border:none;border-top:1px dashed var(--line);margin:8px 0}
 .pc-intro{margin:0 0 8px}
 /* 笔记正文排版（宽松、不挤） */
 .note{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.03)}
-.note .para{margin:0 0 14px;line-height:1.9;font-size:15px;color:#2f3327;text-align:justify}
+.note .para{margin:0 0 14px;line-height:1.95;font-size:15px;color:#2f3327;text-align:justify}
 .note .para:last-child{margin-bottom:0}
-.note h4.ol1{margin:18px 0 8px;font-size:15.5px;color:var(--red);border-left:4px solid var(--red);padding-left:8px}
-.note p.ol2{margin:12px 0 6px;font-weight:800;color:var(--orange);font-size:14.5px}
-.note p.li{margin:8px 0;line-height:1.85;font-size:14.5px;color:#2f3327}
-.note p.li.num b{color:var(--green-d);margin-right:4px}
-.note p.li.cir{margin:6px 0 6px 6px;padding-left:4px;line-height:1.8;font-size:14px;color:#444}
+.note h4.ol1{margin:18px 0 8px;font-size:15.5px;font-weight:800;border-left:4px solid var(--line);padding-left:8px}
+.note p.ol2{margin:12px 0 6px;font-weight:800;font-size:14.5px}
+.note p.li{margin:10px 0;line-height:1.9;font-size:14.5px;padding-left:4px}
+.note p.li.num b{font-weight:700;margin-right:4px}
+.note p.li.cir{margin:8px 0 8px 6px;padding-left:4px;line-height:1.85;font-size:14px}
+/* PDF 三色标注：文字颜色严格按原 PDF（红/蓝/深蓝/绿/黑），!important 确保覆盖标题默认色 */
+.note .col-red{color:#c0392b!important}
+.note .col-blue{color:#1f5fbf!important}
+.note .col-blue2{color:#16429c!important}
+.note .col-green{color:#0f8a4a!important}
+.note .col-blk{color:#2f3327!important}
 </style></head><body><header class="appbar"><h1>🌿 营养师三级 · 应试宝典</h1><span class="cd" id="cd">距考试 — 天</span></header><main id="top"><section id="view-progress" class="view"><div class="hero"><h2>74天冲刺计划</h2><p>2026-10-13 起 · 每天 1.5–2 小时 · 三阶段法（打基础→巩固→冲刺）</p></div><div class="sect-title" id="sched">📅 备考进度表</div><p class="note">今天起到 12/26 考试共 <b>74 个学习日</b>。工作日 1.5h、周末 2h，约 120+ 小时。计划可依进度微调。</p><div class="phase">
 <div class="phase-head"><h3>第一阶段 · 打基础（精读+理解+章节题）</h3><span class="phase-span">10/13 – 11/15（约34天）</span></div>
 <p class="phase-goal">按重要度通读9章理论，建立框架，标注高频数据，每章配套章节题。</p>
@@ -1351,26 +1357,39 @@ u();setInterval(u,3600000);})();
   var LVS={1:3,2:3,3:3,4:3,5:2,6:2};
   function stars(n){return n===3?'★★★':n===2?'★★':'★';}
   function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-  function fmtNote(txt){
-    if(!txt) return '<p class="para">（本节暂无正文）</p>';
-    var lines=txt.split('\n').map(function(s){return s.trim();}).filter(function(s){return s!=='';});
-    var HL=/^([一二三四五六七八九十]+、|（[一二三四五六七八九十]+）|[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭]|\d+\.)/;
-    var h='';var i=0;
-    while(i<lines.length){
-      var b=lines[i];
-      if(/^[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭]/.test(b)){h+='<p class="li cir">'+esc(b)+'</p>';i++;continue;}
-      if(/^（[一二三四五六七八九十]+）/.test(b)){h+='<p class="ol2">'+esc(b)+'</p>';i++;continue;}
-      if(/^[一二三四五六七八九十]+、/.test(b)){h+='<h4 class="ol1">'+esc(b)+'</h4>';i++;continue;}
-      var m=b.match(/^(\d+\.)\s*(.*)$/);
-      if(m){
-        var rest=m[2];var j=i+1;
-        while(j<lines.length&&!HL.test(lines[j])){rest+=' '+lines[j];j++;}
-        h+='<p class="li num"><b>'+esc(m[1])+'</b> '+esc(rest)+'</p>';i=j;continue;
-      }
-      var para=b;var j=i+1;
-      while(j<lines.length&&!HL.test(lines[j])){para+=' '+lines[j];j++;}
-      h+='<p class="para">'+esc(para)+'</p>';i=j;
+  // 把一行文本按序号(1)(2)（一）① 1. 等切成多个独立条目；仅在行首或分隔符后拆分，避免误切
+  function splitItems(txt){
+    var re=/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭]|（[一二三四五六七八九十]+）|[一二三四五六七八九十]+、|\d+\.|（\d+）|\(\d+\)/g;
+    var items=[], last=0, m, prev, lastCh;
+    while((m=re.exec(txt))){
+      var start=m.index;
+      prev=txt.slice(0,start).replace(/\s+$/,'');
+      lastCh=prev.slice(-1);
+      if(start>0 && !/[\s；，、;,(（]/.test(lastCh)) continue; // 行内突兀出现的序号不拆分
+      if(start>last){var seg=txt.slice(last,start).trim(); if(seg) items.push(seg);}
+      last=start;
     }
+    var tail=txt.slice(last).trim();
+    if(tail) items.push(tail);
+    return items.length?items:[txt.trim()].filter(Boolean);
+  }
+  function renderItem(it,col){
+    if(/^[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭]/.test(it)) return '<p class="li cir '+col+'">'+esc(it)+'</p>';
+    if(/^（[一二三四五六七八九十]+）/.test(it)) return '<p class="ol2 '+col+'">'+esc(it)+'</p>';
+    if(/^[一二三四五六七八九十]+、/.test(it)) return '<h4 class="ol1 '+col+'">'+esc(it)+'</h4>';
+    var mm=it.match(/^(\d+)\.\s*([\s\S]*)$/);
+    if(mm) return '<p class="li num '+col+'"><b>'+esc(mm[1])+'.</b> '+esc(mm[2])+'</p>';
+    if(/^（\d+）|^\d+\)/.test(it)) return '<p class="li paren '+col+'">'+esc(it)+'</p>';
+    return '<p class="para '+col+'">'+esc(it)+'</p>';
+  }
+  function fmtNote(content){
+    if(!content||!content.length) return '<p class="para col-blk">（本节暂无正文）</p>';
+    var h='';
+    content.forEach(function(line){
+      var txt=line.t||''; var col='col-'+(line.c||'blk');
+      if(!txt.trim()) return;
+      splitItems(txt).forEach(function(it){ h+=renderItem(it,col); });
+    });
     return h;
   }
   var bHome=document.getElementById('bk-basic-home'),
