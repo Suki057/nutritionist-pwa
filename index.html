@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f9d6b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="营养三级">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>营养师三级 · 应试宝典</title>
+<style>
+:root{
+  --green:#1f9d6b; --green-d:#157a52; --cream:#fbfaf5; --ink:#23291f; --line:#e7e3d6;
+  --red:#d83a3a; --orange:#e08a2e; --blue:#3f72b0; --soft:#f1f8f3;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--cream);color:var(--ink);line-height:1.72;font-size:16px;
+  padding-bottom:env(safe-area-inset-bottom)}
+a{color:var(--green-d);text-decoration:none}
+.appbar{position:sticky;top:0;z-index:20;background:var(--green);color:#fff;
+  padding:calc(10px + env(safe-area-inset-top)) 14px 10px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.appbar h1{margin:0;font-size:18px;display:flex;align-items:center;gap:8px}
+.appbar .cd{margin-top:6px;display:inline-block;background:#fff;color:var(--green-d);
+  font-size:13px;font-weight:700;padding:3px 12px;border-radius:14px}
+.quick{position:sticky;top:0;z-index:15;background:#fff;border-bottom:1px solid var(--line);
+  display:flex;gap:8px;overflow-x:auto;padding:8px 12px;-webkit-overflow-scrolling:touch}
+.quick a{flex:0 0 auto;font-size:13px;background:var(--soft);color:var(--green-d);
+  padding:5px 12px;border-radius:14px;white-space:nowrap}
+.quick a.all{background:var(--green);color:#fff}
+main{padding:12px 12px 90px;max-width:760px;margin:0 auto}
+.hero{background:linear-gradient(120deg,#1f9d6b,#2bbd86);color:#fff;border-radius:14px;
+  padding:16px;margin-bottom:14px}
+.hero h2{margin:0 0 6px;font-size:19px}
+.hero p{margin:0;font-size:13.5px;color:#eafff5}
+.sect-title{font-size:17px;color:var(--green-d);margin:20px 4px 10px;font-weight:800}
+.phase{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.phase-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;border-bottom:2px solid var(--orange);padding-bottom:6px}
+.phase-head h3{margin:0;font-size:15.5px;color:var(--green-d)}
+.phase-span{font-size:12px;color:#b5701a;font-weight:700}
+.phase-goal{font-size:12.5px;color:#6a7160;margin:6px 0 10px}
+table.sched{width:100%;border-collapse:collapse;font-size:12.5px}
+table.sched th{background:var(--soft);color:var(--green-d);text-align:left;padding:6px;font-weight:700}
+table.sched td{padding:6px;border-top:1px solid var(--line);vertical-align:top}
+table.sched .wk{font-weight:800;color:var(--green-d);white-space:nowrap}
+table.sched .dt{white-space:nowrap;color:#b5701a;font-weight:700}
+table.sched .act{color:var(--green);font-size:12px}
+.note{background:var(--soft);border-left:4px solid var(--green);padding:10px 12px;border-radius:0 10px 10px 0;font-size:13.5px;margin:6px 0 14px}
+details.chap{background:#fff;border:1px solid var(--line);border-left:6px solid var(--blue);
+  border-radius:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.03);overflow:hidden}
+details.chap.lv3{border-left-color:var(--red)}
+details.chap.lv2{border-left-color:var(--orange)}
+details.chap.lv1{border-left-color:var(--blue)}
+details.chap>summary{list-style:none;cursor:pointer;padding:13px 14px;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+details.chap>summary::-webkit-details-marker{display:none}
+details.chap>summary::before{content:"▸";color:var(--green);font-size:13px;transition:transform .15s}
+details.chap[open]>summary::before{transform:rotate(90deg)}
+details.chap>:not(summary){padding:0 14px 14px}
+.badge{flex:0 0 auto;font-size:11px;color:#fff;padding:2px 8px;border-radius:10px}
+.badge.lv3{background:var(--red)}.badge.lv2{background:var(--orange)}.badge.lv1{background:var(--blue)}
+#handbook-body>h1{display:none}
+#handbook-body>h2{font-size:18px;color:var(--green-d);margin:16px 0 8px}
+details.chap h3{font-size:14.5px;color:var(--green-d);margin:14px 0 6px;border-left:4px solid var(--orange);padding-left:7px}
+details.chap ul{margin:4px 0 12px;padding-left:20px}
+details.chap li{margin:4px 0}
+details.chap blockquote{background:#fff7e6;border-left:4px solid var(--orange);margin:8px 0;padding:7px 12px;color:#7a5a2a;font-size:13px;border-radius:0 8px 8px 0}
+table{border-collapse:collapse;width:100%;margin:8px 0 14px;font-size:12.5px}
+th{background:var(--soft);color:var(--green-d);border:1px solid var(--line);padding:6px;text-align:left}
+td{border:1px solid var(--line);padding:6px;vertical-align:top}
+tbody tr:nth-child(even){background:#faf8f1}
+hr{border:none;border-top:1px dashed var(--line);margin:8px 0}
+#installHint{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#23311f;color:#eafff0;
+  font-size:13px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:10px;
+  box-shadow:0 -2px 10px rgba(0,0,0,.25)}
+#installHint .txt{flex:1;line-height:1.5}
+#installHint button{background:var(--green);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:700;white-space:nowrap}
+#installHint .x{background:none;color:#9fb89f;border:none;font-size:18px;padding:0 4px}
+@media print{details.chap{break-inside:avoid}}
+</style></head><body><header class="appbar"><h1>🌿 营养师三级 · 应试宝典</h1><span class="cd" id="cd">距考试 — 天</span></header><nav class="quick" id="quick"><a class="all" href="#top">顶部</a><a href="#sched">进度表</a><a href="#handbook">考点手册</a></nav><main id="top"><div class="hero"><h2>74天冲刺计划</h2><p>2026-10-13 起 · 每天 1.5–2 小时 · 三阶段法（打基础→巩固→冲刺）</p></div><div class="sect-title" id="sched">📅 备考进度表</div><p class="note">今天起到 12/26 考试共 <b>74 个学习日</b>。工作日 1.5h、周末 2h，约 120+ 小时。计划可依进度微调。</p><div class="phase">
+<div class="phase-head"><h3>第一阶段 · 打基础（精读+理解+章节题）</h3><span class="phase-span">10/13 – 11/15（约34天）</span></div>
+<p class="phase-goal">按重要度通读9章理论，建立框架，标注高频数据，每章配套章节题。</p>
+<table class="sched"><thead><tr><th>周</th><th>日期</th><th>重点内容</th><th>关键动作</th></tr></thead><tbody>
+<tr><td class="wk">第1周</td><td class="dt">10/13–10/18</td><td>Ch1职业道德(速读+刷题)｜Ch2医学基础：解剖略读+食物消化吸收(重点)+不同人群生理特点</td><td class="act">攻克消化液对比表；记内因子→B12→巨幼贫</td></tr>
+<tr><td class="wk">第2周</td><td class="dt">10/19–10/25</td><td>Ch3营养学基础①：能量及宏量营养素(蛋白质/脂肪/碳水/能量、DRIs、膳食指南八准则)</td><td class="act">背必需氨基酸口诀；卡价4/9/4、供能比</td></tr>
+<tr><td class="wk">第3周</td><td class="dt">10/26–11/01</td><td>Ch3营养学基础②：矿物质+维生素(两张速查表+缺乏病)</td><td class="act">背矿物质/维生素缺乏病口诀；分脂溶/水溶</td></tr>
+<tr><td class="wk">第4周</td><td class="dt">11/02–11/08</td><td>Ch4食物营养学基础：植物性(谷类/大豆)+动物性(畜禽/鱼/蛋/奶)</td><td class="act">记各食物核心营养特点与消化率陷阱</td></tr>
+<tr><td class="wk">第5周</td><td class="dt">11/09–11/15</td><td>Ch5膳食营养指导(重点中的重点)+Ch7公共营养基础：营养教育/社区/缺乏病/慢性病</td><td class="act">熟记平衡膳食宝塔五层与八准则</td></tr>
+</tbody></table></div>
+<div class="phase">
+<div class="phase-head"><h3>第二阶段 · 巩固强化（技能精读+理论重点+错题）</h3><span class="phase-span">11/16 – 12/13（约28天）</span></div>
+<p class="phase-goal">精读6个技能模块(可操作/可计算考点)，回刷理论高频章错题，整理错题本。</p>
+<table class="sched"><thead><tr><th>周</th><th>日期</th><th>重点内容</th><th>关键动作</th></tr></thead><tbody>
+<tr><td class="wk">第6周</td><td class="dt">11/16–11/22</td><td>Ch6人群营养(整章，孕妇→老年；★婴儿营养考点密集，反复做章节题)</td><td class="act">记各人群'营养需求特点'而非死背数值</td></tr>
+<tr><td class="wk">第7周</td><td class="dt">11/23–11/29</td><td>Ch7营养缺乏病/慢性病收尾+Ch8食品卫生(污染/卫生/中毒)+Ch9法规(刷题)</td><td class="act">背食物中毒分类表；食物中毒章多刷题</td></tr>
+<tr><td class="wk">第8周</td><td class="dt">11/30–12/06</td><td>技能模块1膳食调查和评价+模块2人体营养状况测定(体格测量/公式)</td><td class="act">练BMI、腰围、皮褶厚度；24h回顾/称重/记账法</td></tr>
+<tr><td class="wk">第9周</td><td class="dt">12/07–12/13</td><td>技能模块3营养咨询教育+模块4膳食指导和食谱编制(★整节精读，计算重点)</td><td class="act">练食谱编制步骤与营养评价调整</td></tr>
+</tbody></table></div>
+<div class="phase">
+<div class="phase-head"><h3>第三阶段 · 冲刺刷题（整套模拟+查漏+背诵）</h3><span class="phase-span">12/14 – 12/25（约12天）</span></div>
+<p class="phase-goal">做整套模拟卷，错题本过一遍，背口诀与速查表，调整作息。12/26考试。</p>
+<table class="sched"><thead><tr><th>周</th><th>日期</th><th>重点内容</th><th>关键动作</th></tr></thead><tbody>
+<tr><td class="wk">第10周</td><td class="dt">12/14–12/20</td><td>技能模块5食品营养评价+模块6社区营养干预(刷题)｜理论高频错题重刷(Ch3/4/6/8)</td><td class="act">完成第1~2套模拟卷；标记薄弱章</td></tr>
+<tr><td class="wk">第11周</td><td class="dt">12/21–12/25</td><td>第3~5套模拟卷+错题本全过+背矿物质/维生素/食物/中毒速查表与口诀</td><td class="act">考前3天只看重点章+口诀；12/26上考场</td></tr>
+</tbody></table></div><div class="sect-title" id="handbook">📚 考点手册（三色笔记重整）</div><p class="note">红=必背 ★★★ ｜ 橙=重点 ★★ ｜ 蓝=一般 ★。点章节标题展开/收起。先框架→速查表→口诀→避易错。</p><div id="handbook-body"><h1 id="_1">公共营养师（三级）考试向结构化考点手册</h1>
+<blockquote>
+<p>本手册依据三色笔记 PDF 全文（基础知识 9 章 + 技能知识 6 模块）整理，结合学习计划优先级标注重要度，供冲刺背诵与查漏补缺使用。</p>
+</blockquote>
+<h2 id="_2">总览</h2>
+<ul>
+<li><strong>考试科目</strong>：理论知识（基础知识 9 章）+ 技能知识（6 个职业模块）。题型以选择题、多选题、判断题、简答题、计算/案例题为主。</li>
+<li><strong>复习节奏</strong>：建议每天投入 <strong>1.5～2 小时</strong>，保持连续性优于突击。</li>
+<li><strong>三阶段法</strong>：</li>
+<li><strong>基础精读阶段（约 50% 时间）</strong>：按重要度通读核心章节（第 3、4、5、6、7 章及技能模块 1～4），建立知识框架，标注高频数据。</li>
+<li><strong>刷题强化阶段（约 30% 时间）</strong>：对低优先级章节（第 1、9 章、技能模块 5、6）和易考计算/对比的章节（第 8 章食物中毒、矿物质维生素表）直接刷章节题，错题回归笔记。</li>
+<li><strong>冲刺模拟阶段（约 20% 时间）</strong>：做整套模拟卷，重点演练食谱编制、体格测量、膳食调查计算、营养标签制作等可操作题型，背诵口诀与易错点。</li>
+</ul>
+<hr />
+<h2 id="_3">第一章 公共营养师职业道德 【重要度：★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：考点少、多为识记性条文，建议直接刷题，低优先级。</li>
+<li><strong>核心考点</strong></li>
+<li>职业道德六大特征：职业性、普遍性、多样性、继承性、约束性、实践性。</li>
+<li>社会主义职业道德核心：<strong>为人民服务</strong>（本质特征）。</li>
+<li>职业道德作用：协调职业关系、促进行业发展、提高全社会道德水平。</li>
+<li>公共营养师职业守则四条：①遵纪守法、诚实守信、团结协作；②忠于职守、爱岗敬业、钻研业务；③认真负责、服务于民、平等待人；④科学求实、精益求精、开拓创新。</li>
+<li><strong>记忆口诀</strong>：无专门口诀，按"服务人民 + 四条守则"记忆即可。</li>
+<li><strong>易错/易混提醒</strong>：职业守则四条与职业道德"作用"容易混淆，考题常把"核心"设成"爱岗敬业"等干扰项，牢记核心是<strong>为人民服务</strong>。</li>
+</ul>
+<hr />
+<h2 id="_4">第二章 医学基础 【重要度：★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：考点中等，重点在第二节 食物消化吸收、第三节不同人群生理特点（本章第三节在笔记中未单列，生理特点融入各章人群营养）。</li>
+<li><strong>核心考点</strong></li>
+<li>人体最大的钙库：<strong>骨</strong>（体内钙 99% 在骨内）。</li>
+<li>消化管划分：口腔→十二指肠为<strong>上消化道</strong>，空肠以下为<strong>下消化道</strong>。</li>
+<li>消化系统组成：消化管 + 消化腺（唾液腺、肝、胰、胃腺、肠腺）。</li>
+<li>胃内消化关键物质：盐酸（激活胃蛋白酶原、杀菌、促胰液/胆汁/小肠液、助铁钙吸收）、胃蛋白酶原、黏液、<strong>内因子</strong>（缺→维生素 B₁₂ 吸收不良→巨幼红细胞贫血）。</li>
+<li>小肠是消化吸收<strong>最重要</strong>场所，停留 <strong>3～8h</strong>；胰液（碳酸氢盐调 pH 7～8、胰淀粉酶/脂肪酶/蛋白酶原）、胆汁（<strong>无消化酶</strong>，胆盐促脂肪及脂溶性维生素 A、D、E、K 吸收）。</li>
+<li>大肠：主要吸收水分和盐类；细菌合成 B 族维生素、维生素 K。</li>
+<li><strong>对比/速查表</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>消化液/器官</th>
+<th>关键成分</th>
+<th>主要作用</th>
+<th>易考点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>胃液</td>
+<td>盐酸、胃蛋白酶原、内因子</td>
+<td>激活酶、杀菌、助铁钙吸收</td>
+<td>内因子缺→B₁₂缺乏→巨幼贫</td>
+</tr>
+<tr>
+<td>胰液</td>
+<td>碳酸氢盐、三大消化酶原</td>
+<td>小肠内最重要化学消化</td>
+<td>pH 7～8 最适</td>
+</tr>
+<tr>
+<td>胆汁</td>
+<td>胆盐（无消化酶）</td>
+<td>乳化脂肪、促脂溶性 Vit 吸收</td>
+<td>不含消化酶</td>
+</tr>
+<tr>
+<td>小肠液</td>
+<td>肠激酶、小肠淀粉酶</td>
+<td>激活胰蛋白酶原、分解糖肽</td>
+<td>吸收主场所</td>
+</tr>
+<tr>
+<td>大肠</td>
+<td>—</td>
+<td>吸水吸盐、合成 B 族/Vit K</td>
+<td>合成 Vit K</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>：无，重点记"内因子—B₁₂—巨幼贫"因果链。</li>
+<li><strong>易错/易混提醒</strong>：①胆汁<strong>不含消化酶</strong>，但参与消化（易误判为"无消化功能"）；②脂溶性维生素是 A、D、E、K（不是 C）；③内因子缺乏导致的是<strong>巨幼红细胞性贫血</strong>（与叶酸/B₁₂ 缺乏同类）。</li>
+</ul>
+<hr />
+<h2 id="_5">第三章 营养学基础 【重要度：★★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：考点超多，是理论考试核心。重点：能量及宏量营养素（蛋白质、脂肪）、矿物质（碘锌硒）、维生素；营养素作用及缺乏症是核心。</li>
+<li><strong>核心考点</strong></li>
+<li><strong>DRIs 七个指标</strong>：EAR（满足 50%）、RNI（满足 97～98%，相当于旧 RDA）、AI（观察/实验值）、UL（最高耐受）、PI-NCD（预防慢病建议量）、AMDR（宏量营养素可接受范围）、SPL（特定建议量）。</li>
+<li><strong>中国居民膳食指南（2022）八准则</strong>：①食物多样合理搭配；②吃动平衡健康体重；③多吃蔬果奶类全谷大豆；④适量吃鱼禽蛋瘦肉；⑤少盐少油控糖限酒；⑥规律进餐足量饮水；⑦会烹会选会看标签；⑧公筷分餐杜绝浪费。</li>
+<li><strong>能量</strong>：来源——碳水 50～65%、脂肪 20～30%、蛋白质 10～15%；成人轻体力男 <strong>2250 kcal/d</strong>。卡价：碳水 4.0、脂肪 9.0、蛋白质 4.0 kcal/g。</li>
+<li><strong>食物热效应 TEF</strong>：碳水 +5～10%、脂肪 +0～5%、蛋白质 +20～30%，混合膳食约 +10%（基础代谢的 10%）。</li>
+<li><strong>蛋白质</strong>：氮折算系数 <strong>6.25</strong>（含氮 16%）；必需氨基酸 <strong>9 种</strong>；参考蛋白=鸡蛋；优质蛋白=蛋奶肉鱼+大豆；生物价 BV 最高 100（鸡蛋 94、鱼 83、大米 77）；RNI 男 65 / 女 55 g/d（孕中 70、晚 85、乳母 80）。</li>
+<li><strong>必需脂肪酸</strong>：亚油酸 + α-亚麻酸（人体不能合成）。</li>
+<li><strong>矿物质/维生素</strong>：见下方速查表。</li>
+<li><strong>对比/速查表</strong></li>
+</ul>
+<h3 id="1">表① 矿物质速查（元素 / 主要功能 / 典型缺乏病 / 主要食物来源）</h3>
+<table>
+<thead>
+<tr>
+<th>元素</th>
+<th>分类</th>
+<th>主要功能</th>
+<th>典型缺乏病</th>
+<th>主要食物来源</th>
+<th>RNI/AI 关键值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>钙 Ca</td>
+<td>常量</td>
+<td>骨骼牙齿、神经肌肉、凝血</td>
+<td>佝偻病、骨质疏松、婴儿手足抽搐</td>
+<td>奶类及制品（最佳）、豆制品、绿叶菜、虾皮海带</td>
+<td>成人 800；孕中晚/乳母 1000；UL 2000</td>
+</tr>
+<tr>
+<td>磷 P</td>
+<td>常量</td>
+<td>骨骼、能量转移、酸碱平衡</td>
+<td>骨软化</td>
+<td>肉蛋鱼、干酪、坚果、豆类</td>
+<td>720；UL 3500</td>
+</tr>
+<tr>
+<td>钾 K</td>
+<td>常量</td>
+<td>细胞内渗透压、心肌、神经肌肉</td>
+<td>钾缺乏（肌无力、心律失常）</td>
+<td>蔬菜水果（最佳）</td>
+<td>AI 2000</td>
+</tr>
+<tr>
+<td>钠 Na</td>
+<td>常量</td>
+<td>水分渗透压、酸碱、血压</td>
+<td>—</td>
+<td>食盐（主要）</td>
+<td>AI 1500</td>
+</tr>
+<tr>
+<td>镁 Mg</td>
+<td>常量</td>
+<td>激活酶、骨骼神经肌肉</td>
+<td>神经肌肉兴奋亢进</td>
+<td>绿叶菜、糙粮、坚果</td>
+<td>330</td>
+</tr>
+<tr>
+<td>氯 Cl</td>
+<td>常量</td>
+<td>细胞外液容量、胃酸形成</td>
+<td>—</td>
+<td>氯化钠</td>
+<td>AI 2300</td>
+</tr>
+<tr>
+<td>铁 Fe</td>
+<td>微量</td>
+<td>造血、免疫</td>
+<td>缺铁性贫血</td>
+<td>动物肝/血/瘦肉/鱼（吸收率高）；植物性低</td>
+<td>男 12 / 女 20；UL 42</td>
+</tr>
+<tr>
+<td>碘 I</td>
+<td>微量</td>
+<td>合成甲状腺素、促进发育</td>
+<td>甲状腺肿、克汀病（呆小病）</td>
+<td>海带紫菜海鱼等海产品</td>
+<td>120；UL 600</td>
+</tr>
+<tr>
+<td>锌 Zn</td>
+<td>微量</td>
+<td>催化、结构、性发育、食欲免疫</td>
+<td>生长迟缓、味觉障碍、伤口愈合不良</td>
+<td>贝壳类、红肉、动物内脏</td>
+<td>男 12.5 / 女 7.5；UL 40</td>
+</tr>
+<tr>
+<td>硒 Se</td>
+<td>微量</td>
+<td>抗氧化、含硒蛋白、免疫</td>
+<td>克山病、大骨节病</td>
+<td>海产品、肝肾、肉类</td>
+<td>60；UL 400</td>
+</tr>
+<tr>
+<td>铜 Cu</td>
+<td>微量</td>
+<td>催化、脂质糖代谢</td>
+<td>胆固醇升高、糖耐量降低</td>
+<td>牡蛎贝类、坚果、肝肾</td>
+<td>0.8；UL 8</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>常量元素口诀："<strong>盖那绿林留美家</strong>"（钙钠氯磷硫镁钾）；必需微量元素口诀："<strong>铁骨牧童点个新西餐</strong>"（铁钴钼铜碘锌硒铬）。</p>
+</blockquote>
+<h3 id="2">表② 维生素速查（名称 / 功能 / 缺乏病 / 来源 / 备注）</h3>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类别</th>
+<th>主要功能</th>
+<th>缺乏病</th>
+<th>主要来源</th>
+<th>关键 RNI/AI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>维生素 A</td>
+<td>脂溶</td>
+<td>视觉、上皮、骨骼生长、生殖</td>
+<td>夜盲症、干眼病、蟾皮症</td>
+<td>肝脏鱼肝油蛋黄；β-胡萝卜素（有色蔬菜）</td>
+<td>男 800 / 女 700 RAE；UL 3000</td>
+</tr>
+<tr>
+<td>维生素 D</td>
+<td>脂溶</td>
+<td>促钙磷吸收、骨钙化</td>
+<td>佝偻病（婴幼儿）、骨软化症（成人）</td>
+<td>海鱼肝脏蛋黄；晒太阳（内源）</td>
+<td>10；UL 50</td>
+</tr>
+<tr>
+<td>维生素 E</td>
+<td>脂溶</td>
+<td>抗氧化、保红细胞完整</td>
+<td>溶血倾向</td>
+<td>植物油、麦胚、绿叶菜</td>
+<td>AI 14 α-TE；UL 700</td>
+</tr>
+<tr>
+<td>维生素 K</td>
+<td>脂溶</td>
+<td>凝血、骨代谢</td>
+<td>新生儿出血症</td>
+<td>绿色蔬菜、动物肝鱼</td>
+<td>AI 80</td>
+</tr>
+<tr>
+<td>维生素 B₁</td>
+<td>水溶</td>
+<td>辅酶、胃肠蠕动、神经</td>
+<td>脚气病（脚气冲心）</td>
+<td>葵花子花生大豆瘦肉粮谷</td>
+<td>男 1.4 / 女 1.2</td>
+</tr>
+<tr>
+<td>维生素 B₂</td>
+<td>水溶</td>
+<td>黄酶辅酶、细胞生长</td>
+<td>口腔-生殖综合征（唇炎口角炎舌炎阴囊炎）</td>
+<td>内脏、蛋奶、大豆绿叶菜</td>
+<td>男 1.4 / 女 1.2</td>
+</tr>
+<tr>
+<td>维生素 B₆</td>
+<td>水溶</td>
+<td>氨基酸代谢、糖原脂肪酸</td>
+<td>脂溢性皮炎、小细胞贫血</td>
+<td>豆畜肉肝鱼蛋果蔬</td>
+<td>1.4（50+ 为 1.6）；UL 60</td>
+</tr>
+<tr>
+<td>烟酸(维PP)</td>
+<td>水溶</td>
+<td>辅酶Ⅰ/Ⅱ、葡萄糖耐量</td>
+<td>癞皮病"3D"（皮炎腹泻痴呆）</td>
+<td>肝肾瘦肉鱼坚果；玉米为主食易缺</td>
+<td>男 15 / 女 12 NE；UL 35</td>
+</tr>
+<tr>
+<td>叶酸</td>
+<td>水溶</td>
+<td>一碳单位转移、血红蛋白合成</td>
+<td>巨幼红细胞贫血、神经管畸形</td>
+<td>肝肾蛋豆绿叶菜</td>
+<td>400 DFE；UL 1000</td>
+</tr>
+<tr>
+<td>维生素 B₁₂</td>
+<td>水溶</td>
+<td>同型半胱氨酸甲基化</td>
+<td>巨幼红细胞贫血、高同型半胱氨酸血症</td>
+<td>肉内脏鱼禽贝（植物性无）</td>
+<td>2.4</td>
+</tr>
+<tr>
+<td>维生素 C</td>
+<td>水溶</td>
+<td>胶原合成、促铁吸收、解毒</td>
+<td>坏血病（牙龈出血、伤口愈合不良）</td>
+<td>新鲜蔬菜（辣椒菠菜）、水果（鲜枣柑橘）</td>
+<td>100；UL 2000</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>脂溶性：A、D、E、K；水溶性：B 族 + C。B₁₂ 仅存于动物性食物。</p>
+</blockquote>
+<h3 id="3a">表③（a）宏量营养素速查</h3>
+<table>
+<thead>
+<tr>
+<th>营养素</th>
+<th>关键点</th>
+<th>参考摄入量/数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>蛋白质</td>
+<td>含氮 16%，折算系数 6.25；9 种必需氨基酸；参考蛋白=鸡蛋；优质蛋白=蛋奶肉鱼+大豆；完全/半完全/不完全；BV 最高 100</td>
+<td>RNI 男 65/女 55；供能 10～15%</td>
+</tr>
+<tr>
+<td>脂类</td>
+<td>必需脂肪酸=亚油酸+α-亚麻酸；类脂称"固定脂/不动脂"；胆固醇只存动物性食物</td>
+<td>供能 20～30%；植物来源脂肪≥总脂肪 50%</td>
+</tr>
+<tr>
+<td>碳水化合物</td>
+<td>分糖/寡糖/多糖；GI 概念；膳食纤维（可溶性+不可溶性）</td>
+<td>供能 50～65%；AI 25～30 g/d</td>
+</tr>
+<tr>
+<td>能量</td>
+<td>卡价 4/9/4；TEF 蛋白最高(20～30%)；成人轻体力男 2250 kcal/d</td>
+<td>来源：碳水 50～65%、脂肪 20～30%、蛋白 10～15%</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>必需氨基酸口诀："<strong>笨蛋来宿舍，晾一凉鞋</strong>"——苯丙、蛋、赖、苏、（组）舍、色、亮、异亮、缬（9 种：苯丙氨酸、蛋氨酸、赖氨酸、苏氨酸、组氨酸、色氨酸、亮氨酸、异亮氨酸、缬氨酸）。</p>
+</blockquote>
+<ul>
+<li><strong>记忆口诀</strong></li>
+<li>矿物质缺乏病：碘→大脖子/呆小；硒→克山/大骨节；铁→贫血；锌→味盲不长；钙→佝偻/疏松；VA→夜盲蟾皮。</li>
+<li>维生素缺乏："B₁ 脚气 B₂ 口生，C 坏血 A 夜盲，D 佝偻 K 出血，叶酸 B₁₂ 巨幼贫，烟酸癞皮 3D 症"。</li>
+<li><strong>易错/易混提醒</strong></li>
+<li><strong>必需脂肪酸</strong>是亚油酸 + α-亚麻酸（不是 EPA/DHA，EPA/DHA 是长链 n-3，可由 α-亚麻酸衍生）。</li>
+<li><strong>限制性氨基酸</strong>：谷类缺赖氨酸、豆类缺蛋氨酸——是蛋白质互补的考点。</li>
+<li><strong>食物热效应</strong>蛋白质最高（20～30%），不是脂肪。</li>
+<li><strong>参考蛋白</strong>是鸡蛋，不是大豆；<strong>优质蛋白</strong>包含大豆但大豆是植物来源。</li>
+<li>RNI 满足 97～98%，EAR 满足 50%（个体配餐用 RNI/AI，不用 EAR；EAR 用于群体切点法）。</li>
+</ul>
+<hr />
+<h2 id="_6">第四章 食物营养学基础 【重要度：★★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：重点章节。第一节植物性食物（谷类、大豆精读）、第二节动物性食物（整节精读）。</li>
+<li><strong>核心考点</strong></li>
+<li>谷类：碳水 70% 以上（主要能量源）；蛋白 7～12% <strong>赖氨酸偏低</strong>；脂肪不饱和脂肪酸；B 族为主；淘洗损失维 B₁ 30～60%、维 B₂/烟酸 20～25%、矿物质 70%；宜与豆类/动物性食物互补补赖氨酸。</li>
+<li>大豆：蛋白 30% 以上（完全蛋白），<strong>赖氨酸多、蛋氨酸少</strong>；整粒熟大豆消化率 65.3%，豆浆 84.9%，豆腐 92～96%。</li>
+<li>蔬菜：叶菜类胡萝卜素/维 C/矿物质丰富；<strong>先洗后切、急火快炒、现做现吃</strong>；菌藻含碘（海带紫菜）、多糖（香菇银耳木耳）。</li>
+<li>水果：维 C（鲜枣、橘子高）、果胶、膳食纤维。</li>
+<li>畜禽肉：蛋白 10～20%，<strong>猪肉脂肪最高</strong>，禽肉不饱和脂肪酸多；内脏富维 A、维 B₂、铁、锌、硒；宜与谷类搭配。</li>
+<li>蛋类：蛋白生物价 <strong>94（最高）</strong>，蛋黄胆固醇极高，铁生物利用率仅约 3%。</li>
+<li>鱼类：不饱和脂肪酸多，硒锌丰富，海鱼碘多；软体动物酪氨酸/色氨酸高于鱼牛肉。</li>
+<li>乳类：蛋白生物价 85，乳糖促钙吸收，<strong>发酵乳是膳食最好天然钙源</strong>。</li>
+<li><strong>对比/速查表</strong></li>
+</ul>
+<h3 id="3b">表③（b）食物营养价值重点（核心营养特点 + 考点）</h3>
+<table>
+<thead>
+<tr>
+<th>食物</th>
+<th>核心营养特点</th>
+<th>考点/易错</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>谷类</td>
+<td>碳水 70%+；蛋白赖氨酸低；B 族；胚芽油亚油酸高</td>
+<td>淘洗/精研损失维 B 与矿物质；赖氨酸为第一限制氨基酸</td>
+</tr>
+<tr>
+<td>大豆</td>
+<td>蛋白 30%+ 完全蛋白；赖氨酸多蛋氨酸少；不饱和脂肪</td>
+<td>整粒消化率 65.3%→豆腐 92～96%；与谷类互补</td>
+</tr>
+<tr>
+<td>蔬菜</td>
+<td>叶菜胡萝卜素/维 C/矿物质；菌藻含碘多糖</td>
+<td>先洗后切、急火快炒；深色&gt;浅色、叶部&gt;根茎</td>
+</tr>
+<tr>
+<td>水果</td>
+<td>维 C、果胶、膳食纤维；鲜枣柑橘维 C 高</td>
+<td>鲜果易腐宜冷藏；不能替代蔬菜</td>
+</tr>
+<tr>
+<td>畜禽肉</td>
+<td>蛋白 10～20%；猪肉脂肪最高；内脏富维 A/铁/锌/硒</td>
+<td>畜肉饱和脂肪高；禽肉不饱和多，宜心血管人群</td>
+</tr>
+<tr>
+<td>鱼类</td>
+<td>不饱和脂肪、硒锌、海鱼碘</td>
+<td>青皮红肉鱼（金枪鱼等）易组胺中毒；河豚有毒</td>
+</tr>
+<tr>
+<td>蛋类</td>
+<td>蛋白 BV 94 最高；蛋黄胆固醇极高；铁利用率 3%</td>
+<td>蛋铁"高含量低吸收"</td>
+</tr>
+<tr>
+<td>奶类</td>
+<td>蛋白 BV 85；乳糖促钙；发酵乳最佳钙源</td>
+<td>生乳须消毒；避光保存护维</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>："谷类缺赖豆缺蛋，大豆豆腐消化翻；蛋奶生物价最高，鱼肝碘硒记心间。"</li>
+<li><strong>易错/易混提醒</strong></li>
+<li>蛋白质消化率：整粒大豆（65.3%）&lt; 豆浆（84.9%）&lt; 豆腐（92～96%），别记反。</li>
+<li>蛋的生物价 94 高于奶的 85，但蛋铁吸收率仅 ~3%（"含量高、利用率低"陷阱）。</li>
+<li>海产品富碘，但<strong>甲亢/高碘</strong>人群需注意；碘缺乏与高碘都可引起甲状腺肿。</li>
+</ul>
+<hr />
+<h2 id="_7">第五章 膳食营养指导 【重要度：★★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：计划称为"重点中的重点"，但笔记正文内容精炼，需结合膳食指南与宝塔系统掌握。</li>
+<li><strong>核心考点</strong></li>
+<li>膳食营养指导作用：传递平衡膳食理念、帮助养成饮食习惯、降低疾病风险。</li>
+<li>膳食营养管理主要内容：①食物选择；②计划膳食；③膳食评价；④膳食改善。</li>
+<li><strong>中国居民平衡膳食宝塔</strong>（自下而上：谷薯类→蔬菜水果→畜禽鱼蛋→奶豆→油盐），是评价膳食结构的标尺（技能模块 1 用其比较摄入量）。</li>
+<li>平衡膳食：一段时间内食物种类与比例最大限度满足不同能量水平人群需求。</li>
+<li>与第三章膳食指南 2022 八准则、DRIs 配合使用。</li>
+<li><strong>对比/速查表（膳食结构评价用：食物类别 vs 宝塔推荐量）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>食物类别</th>
+<th>宝塔推荐量（参考）</th>
+<th>评价要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>谷类</td>
+<td>200～300 g</td>
+<td>主体能量来源</td>
+</tr>
+<tr>
+<td>蔬菜</td>
+<td>300～500 g</td>
+<td>深色占半</td>
+</tr>
+<tr>
+<td>水果</td>
+<td>200～350 g</td>
+<td>整果优于果汁</td>
+</tr>
+<tr>
+<td>畜禽肉</td>
+<td>40～75 g</td>
+<td>红肉适量</td>
+</tr>
+<tr>
+<td>鱼虾</td>
+<td>40～75 g</td>
+<td>常吃海鱼补碘/硒</td>
+</tr>
+<tr>
+<td>蛋类</td>
+<td>40～50 g</td>
+<td>不弃蛋黄</td>
+</tr>
+<tr>
+<td>奶类</td>
+<td>300 g</td>
+<td>最佳钙源</td>
+</tr>
+<tr>
+<td>大豆及坚果</td>
+<td>25～35 g</td>
+<td>与谷类互补</td>
+</tr>
+<tr>
+<td>油脂</td>
+<td>25～30 g</td>
+<td>植物油为主</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>："宝塔五层记分明，谷蔬鱼肉奶豆油；指南八条天天读，平衡膳食保太平。"</li>
+<li><strong>易错/易混提醒</strong>：膳食指导的"管理内容"四点是选择/计划/评价/改善，考题可能把"膳食指南准则"混进来，注意区分"指导内容"与"指南准则"。</li>
+</ul>
+<hr />
+<h2 id="_8">第六章 人群营养 【重要度：★★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：整章精读，第三节婴儿营养考点密集（反复做章节题）；掌握不同人群营养需求"特点"而非死记数值。</li>
+<li><strong>核心考点</strong></li>
+<li><strong>孕妇</strong>：孕早能量不变，孕中 +300、孕晚 +450 kcal/d；蛋白孕中 +15、晚 +30 g/d；钙 1000、铁孕中 24/晚 29、碘 230、锌 9.5、叶酸 600 μgDFE；VA 770 RAE、VD 10。</li>
+<li><strong>乳母</strong>：能量 +500；蛋白 RNI +25（达 80）；钙 1000、铁 24；VA 1300、VD 10、VC 150；DHA+EPA AI 250 mg/d（其中 DHA 200）。</li>
+<li><strong>婴儿（0～12 月）</strong>：0～6 月 EER 90 kcal/(kg·d)，7～12 月 80；蛋白 AI 9 g（0～6）、20 g（7～12）；脂肪 48%E/40%E；钙 200/250；铁 0.3/10（首辅铁强化）；锌 2.0/3.5；VA 300/350；VD 10（不需补钙，要补维 D）；<strong>母乳最佳，应持续到 2 岁</strong>；辅食 6 月龄起（从富铁泥糊开始）。</li>
+<li><strong>幼儿（1～3 岁）</strong>：EER 900/1100/1250；蛋白 25/25/30；钙 600、铁 9、锌 4.0、碘 90、VA 310、VD 10。</li>
+<li><strong>学龄前（4～6 岁）</strong>：EER 1250～1800；蛋白 30～35（动物占 50%）；钙 800（奶 300～600 mL）；铁 10、锌 5.5、碘 90、VA 360。</li>
+<li><strong>学龄儿童青少年</strong>：钙 7～10 岁 1000、11～13 岁 1200、14～17 岁 1000；铁（青春期女童易贫）；锌、碘随年龄增；能量正平衡。</li>
+<li><strong>老年人（≥50）</strong>：蛋白男 65/女 55（优质占 50%）；钙 1000；铁 12；VA 800/700；<strong>65 岁以上 VD 15</strong>（高于中青年）；VE 14（PI 维 C 200）；同型半胱氨酸相关（B₆/B₁₂/叶酸）。</li>
+<li><strong>对比/速查表（④ 人群营养核心需求特点）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>人群</th>
+<th>能量特点</th>
+<th>蛋白/钙/铁/碘等关键</th>
+<th>特别考点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>孕妇</td>
+<td>中+300 晚+450</td>
+<td>钙 1000、铁 24/29、碘 230、叶酸 600</td>
+<td>早期补叶酸防神经管畸形</td>
+</tr>
+<tr>
+<td>乳母</td>
+<td>非孕+500</td>
+<td>钙 1000、铁 24、VA 1300、DHA 200</td>
+<td>多进优质蛋白与海产品</td>
+</tr>
+<tr>
+<td>婴儿</td>
+<td>90/80 kcal/kg</td>
+<td>维 D 必补不补钙；铁首辅强化</td>
+<td>母乳最佳；6 月加辅食</td>
+</tr>
+<tr>
+<td>幼儿</td>
+<td>900～1250</td>
+<td>钙 600、铁 9、锌 4.0</td>
+<td>奶类仍重要</td>
+</tr>
+<tr>
+<td>学龄前</td>
+<td>1250～1800</td>
+<td>蛋白动物 50%、钙 800、奶 300-600mL</td>
+<td>防挑食</td>
+</tr>
+<tr>
+<td>学龄/青少年</td>
+<td>正平衡</td>
+<td>钙峰值（11～13 岁 1200）、铁（女易贫）</td>
+<td>青春期突增</td>
+</tr>
+<tr>
+<td>老年人</td>
+<td>渐减</td>
+<td>钙 1000、VD 15、优质蛋白 50%</td>
+<td>防骨质疏松/高同型半胱氨酸</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>："孕中晚加三和四（300/450），铁碘叶酸不能迟；婴儿九十（90kcal）维 D 补，六月辅食铁先施；老来钙千 D 十五，同型半胱三 B 治。"</li>
+<li><strong>易错/易混提醒</strong></li>
+<li>婴儿 <strong>0.3 mg/d 铁</strong> 是 0～6 月 AI（母乳铁低但吸收好），<strong>7～12 月骤升 10 mg/d</strong>——辅食必须富铁。</li>
+<li>维 D：<strong>婴儿、孕妇、乳母、老年人均 10/15 μg</strong>，但 65 岁以上老人 RNI 为 15（高于中青年 10）。</li>
+<li>不要死记所有数值，重点记"特点"：如老年优质蛋白 50%、学龄前动物蛋白 50%、乳母 DHA 200 mg。</li>
+</ul>
+<hr />
+<h2 id="_9">第七章 公共营养基础 【重要度：★★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：考点密集（营养教育、社区营养管理、营养缺乏病、膳食与慢性病），需全面掌握。</li>
+<li><strong>核心考点</strong></li>
+<li><strong>营养教育</strong>：实施 6 步骤（了解对象→制订计划→确定途径资料→前期准备→实施→效果评价）；健康传播 5 要素（传播者、受传者、信息、媒介、反馈）；行为理论（知信行、健康信念模式 5 因素、计划行为理论）。</li>
+<li><strong>社区营养管理</strong>：基本程序 5 步骤（现状调查→确定目标→制订计划→执行→评价）；社区动员 5 方面（专业人员、社区人群、领导、非政府组、部门沟通）；城市慢病多、农村缺乏病多。</li>
+<li><strong>营养缺乏病</strong>（见速查表⑤）；<strong>膳食与慢病</strong>（肥胖、高血压、高血脂、冠心病、脑卒中、糖尿病、痛风、骨质疏松）。</li>
+<li>肥胖判定：BMI（&lt;18.5 瘦、18.5～24 正常、24～28 超重、≥28 肥胖）；腰围（男 ≥85、女 ≥80 腹型肥胖）；腰臀比（男 &gt;0.9、女 &gt;0.8）；理想体重=身高-105。</li>
+<li>高血压：≥140/90 mmHg；糖尿病诊断（空腹 ≥7.0、餐后 2h ≥11.1 mmol/L）。</li>
+<li><strong>对比/速查表（营养缺乏病速查）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>缺乏病</th>
+<th>典型表现/体征</th>
+<th>好发人群/备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>蛋白质-能量营养不良 PEM</td>
+<td>水肿型（蛋白质缺）、干瘦型（能量缺）、混合型</td>
+<td>最致命营养不良</td>
+</tr>
+<tr>
+<td>维生素 A 缺乏</td>
+<td>眼干燥、夜盲、角膜软化、蟾皮症</td>
+<td>眼部症状最早</td>
+</tr>
+<tr>
+<td>维生素 D 缺乏</td>
+<td>佝偻病（婴幼儿）、骨软化症（成人，"鸭步"）</td>
+<td>孕后期+新生儿补维 D</td>
+</tr>
+<tr>
+<td>维生素 B₁ 缺乏</td>
+<td>脚气病（脚气冲心、婴儿型）</td>
+<td>谷类加工过精</td>
+</tr>
+<tr>
+<td>维生素 B₂ 缺乏</td>
+<td>口腔-生殖综合征</td>
+<td>唇炎口角炎舌炎阴囊炎</td>
+</tr>
+<tr>
+<td>维生素 C 缺乏</td>
+<td>坏血病（牙龈出血、坏血病串珠）</td>
+<td>需 3～4 月显症</td>
+</tr>
+<tr>
+<td>叶酸缺乏</td>
+<td>巨幼红细胞贫血、神经管畸形</td>
+<td>围孕期补 400 μg</td>
+</tr>
+<tr>
+<td>钙缺乏</td>
+<td>婴儿手足抽搐、成人骨质疏松</td>
+<td>—</td>
+</tr>
+<tr>
+<td>铁缺乏</td>
+<td>缺铁性贫血（异食癖、苍白）</td>
+<td>三期：铁减少→红细胞生成缺铁→贫血</td>
+</tr>
+<tr>
+<td>锌缺乏</td>
+<td>生长迟缓、味觉障碍、匙状甲</td>
+<td>伴铁缺乏贫血貌</td>
+</tr>
+<tr>
+<td>碘缺乏</td>
+<td>甲状腺肿、克汀病（呆小）</td>
+<td>高碘也致甲状腺肿</td>
+</tr>
+<tr>
+<td>硒缺乏</td>
+<td>克山病、大骨节病</td>
+<td>补硒 50～100 μg/d</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>："缺 A 夜盲蟾皮眼，缺 D 佝偻鸭步软；B₁ 脚气 B₂ 口生，C 坏血 B 巨幼贫；碘大脖硒克山，铁贫锌矮钙疏松。"</li>
+<li><strong>易错/易混提醒</strong></li>
+<li>脚气病（B₁）≠ 脚气（真菌），前者是神经/心血管病。</li>
+<li>佝偻病（婴幼儿骨软化）与骨软化症（成人）同因 VD 缺乏，但名称按年龄区分。</li>
+<li>肥胖判定：BMI≥28 为肥胖；腹型肥胖看腰围（男 85/女 80），别与腰臀比阈值（0.9/0.8）混淆。</li>
+<li>糖尿病诊断空腹 ≥7.0 与 IFG（6.1～7.0）区分；餐后 ≥11.1 与 IGT（7.8～11.1）区分。</li>
+</ul>
+<hr />
+<h2 id="_10">第八章 食品卫生基础 【重要度：★★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：重点在食品污染及预防、各类食品卫生要求、食物中毒及预防（建议刷题）。</li>
+<li><strong>核心考点</strong></li>
+<li>食品污染分类：<strong>生物性、化学性、物理性</strong>。</li>
+<li><strong>黄曲霉毒素</strong>：耐热（280℃ 裂解、碱性破坏），花生/玉米最严重，最强化学致癌（肝癌）；防霉（控水分）去毒（挑霉粒、加碱）。</li>
+<li>农药：有机氯（DDT/六六六，脂溶蓄积久）；有机磷（敌百虫/敌敌畏，神经毒，易分解）。</li>
+<li>有毒金属：汞（甲基汞，水俣病，鱼贝最害）、镉（骨痛病/痛痛病，肾骨）、铅（神经造血肾）、砷（砒霜，二巯基丙醇解毒）。</li>
+<li>N-亚硝基化合物（腌菜腊肉）、苯并芘（熏烤）、杂环胺（高温蛋白质）。</li>
+<li>罐头"胖听"三因：生物性（产气）、化学性（氢，锡高）、物理性（装太满）。</li>
+<li><strong>食物中毒</strong>：概念（非传染性、与食物有关、不传染、暴发性）；分类（细菌性/有毒动植物/化学性/真菌毒素）。</li>
+<li><strong>对比/速查表（⑤ 食物中毒类型 / 原因食品 / 特点）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>代表</th>
+<th>原因食品</th>
+<th>关键特点/潜伏期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>沙门氏菌</td>
+<td>细菌性</td>
+<td>动物性食品、熟肉冷荤</td>
+<td>5～10 月多；12～36h；肉块中心 80℃/12min</td>
+</tr>
+<tr>
+<td>葡萄球菌肠毒素</td>
+<td>细菌性</td>
+<td>乳蛋制品、熟肉</td>
+<td>肠毒素耐热；2～4h；儿童重</td>
+</tr>
+<tr>
+<td>肉毒梭菌</td>
+<td>细菌性</td>
+<td>自制发酵豆谷类、罐头</td>
+<td>神经麻痹；冬春；80℃ 30min 破坏毒素</td>
+</tr>
+<tr>
+<td>副溶血弧菌</td>
+<td>细菌性</td>
+<td>海产品（沿海常见）</td>
+<td>嗜盐；6～9 月；75℃ 5min 杀；醋可杀</td>
+</tr>
+<tr>
+<td>O₁₅₇:H₇ 大肠杆菌</td>
+<td>细菌性</td>
+<td>肉、生奶、蔬菜</td>
+<td>出血性结肠炎；6～9 月；小儿老人重</td>
+</tr>
+<tr>
+<td>河豚中毒</td>
+<td>有毒动物</td>
+<td>河豚（卵巢肝毒最强，春产毒）</td>
+<td>神经毒，220℃ 不破；0.5～3h</td>
+</tr>
+<tr>
+<td>组胺中毒</td>
+<td>有毒动物</td>
+<td>青皮红肉鱼（不新鲜）</td>
+<td>发病快恢复快</td>
+</tr>
+<tr>
+<td>毒蕈中毒</td>
+<td>有毒植物</td>
+<td>毒蘑菇（脏器损害型最凶）</td>
+<td>假愈期易误诊</td>
+</tr>
+<tr>
+<td>氰苷类</td>
+<td>有毒植物</td>
+<td>苦杏仁、木薯</td>
+<td>氢氰酸；1～2h</td>
+</tr>
+<tr>
+<td>亚硝酸盐</td>
+<td>化学性</td>
+<td>暴腌菜、苦井水、误食</td>
+<td>肠源性青紫；美蓝+VC+糖解救</td>
+</tr>
+<tr>
+<td>砷化物</td>
+<td>化学性</td>
+<td>含砷农药/原料</td>
+<td>二巯基丙醇解毒</td>
+</tr>
+<tr>
+<td>赤霉病麦</td>
+<td>真菌毒素</td>
+<td>病麦（长江中下游）</td>
+<td>呕吐为主</td>
+</tr>
+<tr>
+<td>霉变甘蔗</td>
+<td>真菌毒素</td>
+<td>红心甘蔗</td>
+<td>3-硝基丙酸，中枢神经损害</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>："沙门熟肉葡萄奶，肉毒发酵副溶血海；河豚春毒组胺鱼，毒蕈假愈最凶险；亚硝青紫美蓝救，砷用二巯莫迟延。"</li>
+<li><strong>易错/易混提醒</strong></li>
+<li>沙门氏菌繁殖最适 37℃，但 20℃ 以上即大量繁殖——冷藏要 &lt;5℃。</li>
+<li>葡萄球菌<strong>肠毒素</strong>耐热（100℃ 2h 才破），与一般细菌不同，剩饭常温不超 2h。</li>
+<li>肉毒毒素不耐热（80℃ 30min 破），但芽孢耐高温（干热 180℃）。</li>
+<li>亚硝酸盐急救：<strong>美蓝 + 维生素 C + 葡萄糖</strong>（三联）；砷中毒特效：<strong>二巯基丙醇类</strong>。</li>
+<li>副溶血弧菌"嗜盐"，对酸敏感（醋 1min 杀），别与沙门混淆。</li>
+</ul>
+<hr />
+<h2 id="_11">第九章 相关法律法规 【重要度：★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：考点少，建议直接刷题，低优先级。</li>
+<li><strong>核心考点</strong></li>
+<li><strong>《食品安全法》</strong>：2015 年 10 月 1 日施行；确定风险监测评估制度；食品安全标准 8 项内容；禁止生产经营 13 类食品；预包装食品标签 9 项事项。</li>
+<li><strong>营养强化剂标准 GB 14880—2012</strong>（2013.1.1 施行）：弥补加工储存损失、改善人群缺乏。</li>
+<li><strong>营养标签通则 GB 28050—2011</strong>（2013.1.1）：核心营养素 = <strong>蛋白质、脂肪、碳水化合物、钠</strong>；强制标示能量 + 四类核心及其 NRV%；豁免（生鲜、酒类、饮用水、现制现售、小包装等）。</li>
+<li><strong>《营养改善工作管理办法》</strong>：2010.9.1 施行；县级以上卫生部门负责制。</li>
+<li><strong>记忆口诀</strong>："标签四核蛋脂碳钠，强制能量 NRV；豁免生鲜酒饮水，小包现售不用示。"</li>
+<li><strong>易错/易混提醒</strong>：核心营养素是"蛋白质、脂肪、碳水化合物、钠"（<strong>不含能量、不含胆固醇、不含钙</strong>）；能量单独强制标示。预包装标签 9 项含生产许可证编号、成分/配料表等，别漏"贮存条件"和"生产许可证编号"。</li>
+</ul>
+<hr />
+<h1 id="_12">技能知识</h1>
+<h2 id="1_1">职业模块 1 膳食调查和评价 【重要度：★★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：考点超多，膳食调查方法、计算与评价是技能核心。</li>
+<li><strong>核心考点（可操作/可计算）</strong></li>
+<li><strong>膳食调查方法</strong>：称重法、记账法、化学分析法、询问法（24h 回顾法、膳食史法）、食物频率法。</li>
+<li><strong>24h 回顾法</strong>：连续调查 <strong>3 天</strong>（2 工作日 + 1 休息日）；不适合 <strong>7 岁以下、75 岁以上</strong>；15～40 min 完成；用家用量具/模型/图谱估量。</li>
+<li><strong>记账法</strong>：适用家庭、托幼、学校、部队等建有伙食账目单位；可得人均长期摄入，难分析个体。</li>
+<li><strong>称重记账法</strong>（最常用）：家庭实际消费量 = 结存 + 购进 − 废弃 − 剩余；人均日摄入 = 实际消费 ÷ 总人日数。</li>
+<li><strong>人日数</strong>：个人人日数 = 早×餐次比 + 中×餐次比 + 晚×餐次比；在外就餐也计入。</li>
+<li><strong>标准人</strong>：以 18～49 岁轻体力男性（2250 kcal）为 1，混合系数 = 总标准人日数 ÷ 总人日数；标准人食物/营养素 = 人均 ÷ 混合系数。</li>
+<li><strong>膳食结构评价</strong>：按 5 类食物（谷、蔬果、鱼肉蛋、奶豆、油脂）与平衡膳食宝塔比较。</li>
+<li><strong>能量来源分布</strong>：食物来源（谷/豆/薯/动物/纯热能/其他 6 类）+ 营养素来源（蛋白/脂肪/碳水供能比）+ 蛋白质来源（动物+豆类=优质蛋白占比）。</li>
+<li><strong>对比/速查表（膳食调查方法比较）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>适用</th>
+<th>优点</th>
+<th>局限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>24h 回顾</td>
+<td>个体、家庭</td>
+<td>快速、不需高文化</td>
+<td>依赖记忆，不适合老幼</td>
+</tr>
+<tr>
+<td>记账法</td>
+<td>集体/家庭</td>
+<td>可长期、低成本、易自行</td>
+<td>只得人均，难个体</td>
+</tr>
+<tr>
+<td>称重记账法</td>
+<td>集体/家庭</td>
+<td>准确、兼顾数量</td>
+<td>工作量大</td>
+</tr>
+<tr>
+<td>膳食史法</td>
+<td>群体习惯</td>
+<td>反映长期模式</td>
+<td>抽象、需专家</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>："回顾三天问记忆，记账账目看长期；称重最准人日算，标准人用二二五（2250）。"</li>
+<li><strong>易错/易混提醒</strong></li>
+<li>个人人日数即使每日 2 餐或特殊 1 餐/多餐，仍算 <strong>1 人日</strong>。</li>
+<li>标准人基准是 <strong>18～49 岁轻体力男性 2250 kcal</strong>，不是所有成人平均。</li>
+<li>24h 回顾不适于 7 岁以下和 75 岁以上（记忆不可靠）。</li>
+<li>3 天回顾通常"两工作日 + 一休息日"，不是任意 3 天。</li>
+</ul>
+<hr />
+<h2 id="2_1">职业模块 2 人体营养状况测定和评价 【重要度：★★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：考点超多，体格测量指标与公式是技能计算重点。</li>
+<li><strong>核心考点（公式与指标）</strong></li>
+<li><strong>体格测量指标</strong>：成人以身高、体重最重要（体重对蛋白/能量更灵敏）；儿童加坐高、头围、胸围、上臂围。</li>
+<li><strong>BMI</strong> = 体重(kg) ÷ 身高²(m²)：&lt;18.5 消瘦、18.5～24 正常、24～28 超重、≥28 肥胖。</li>
+<li><strong>上臂围</strong>（肩峰—尺骨鹰嘴中点）：1～5 岁儿童 &gt;13.5 cm 良、12.5～13.5 中、&lt;12.5 不良。</li>
+<li><strong>皮褶厚度</strong>（肩胛下角、肱三头肌、脐旁）：男 &lt;10 瘦 / 10～40 中 / &gt;40 肥；女 &lt;20 / 20～50 / &gt;50。</li>
+<li><strong>婴幼儿测量</strong>：卧位量床；出生时胸围比头围小 1～2 cm，<strong>1 岁左右胸围≈头围</strong>，12～21 月超头围。</li>
+<li><strong>生物样品</strong>：24h 尿（水溶性 Vit 负荷、肌酐、氮平衡）；粪便（氮平衡、矿物吸收）；血样（<strong>空腹或禁食 6h 以上</strong>采）；抗凝剂（草酸钾、枸橼酸盐、EDTA、肝素）。</li>
+<li><strong>营养不良判别</strong>：PEM（水肿/消瘦/混合）；缺铁性贫血三期（铁减少期→红细胞生成缺铁期→缺铁性贫血期）；VA 缺乏（眼干燥夜盲蟾皮）；佝偻病/骨软化；VC 缺乏（坏血病串珠）；B₂ 缺乏（口腔生殖综合征，AC 升高）；锌缺乏（生长障碍、口角炎、匙状甲）。</li>
+<li><strong>对比/速查表（体格测量与判别）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>公式/标准</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BMI</td>
+<td>体重/身高²</td>
+<td>胖瘦分级</td>
+</tr>
+<tr>
+<td>上臂围(1-5岁)</td>
+<td>&gt;13.5 / 12.5-13.5 / &lt;12.5</td>
+<td>营养良/中/不良</td>
+</tr>
+<tr>
+<td>皮褶厚度</td>
+<td>男 10/40、女 20/50 分界</td>
+<td>肥胖分级</td>
+</tr>
+<tr>
+<td>胸围≈头围</td>
+<td>1 岁相等</td>
+<td>婴幼儿发育</td>
+</tr>
+<tr>
+<td>缺铁性贫血</td>
+<td>三期进展</td>
+<td>铁减少→生成缺铁→贫血</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>："BMI 二十四八分，上臂十三半岁分；皮褶男十女二十，一岁胸围赶过头。"</li>
+<li><strong>易错/易混提醒</strong></li>
+<li>皮褶厚度男女分界不同（男 10/40，女 20/50），别混用。</li>
+<li>血样必须<strong>空腹/禁食 6h 以上</strong>才有代表性；血浆含纤维蛋白原、血清不含。</li>
+<li>缺铁性贫血"三期"顺序：铁减少期（储存铁降、无症状）→红细胞生成缺铁期（运铁蛋白降、未贫血）→缺铁性贫血期（Hb 下降）。</li>
+<li>B₂ 缺乏的特异诊断：全血谷胱甘肽还原酶活力系数（AC）增高。</li>
+</ul>
+<hr />
+<h2 id="3">职业模块 3 营养咨询和教育 【重要度：★★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：考点超多，人际传播技巧与烹饪营养是实操考点。</li>
+<li><strong>核心考点</strong></li>
+<li><strong>人际传播技巧</strong>：开场/结束、说话、听话、问话（6 型：封闭/开放/倾向/试探/索究/复合）、反馈（积极/消极/模糊）、非语言传播（动态/静态体语、类语言、时空语言）、观察。</li>
+<li><strong>烹饪对营养素影响 &amp; 减损 6 措施</strong>：上浆挂糊、加醋（维 C/钙溶出）、先洗后切、急火快炒、勾芡、慎用碱（碱破坏蛋白和维）。</li>
+<li>烹饪损失数据：捞面条丢维 B₁ 49%、捞米饭 67%；旺火急炒肉丝维 B₁ 仅失 13%，慢炖失 65%。</li>
+<li><strong>平衡膳食测评</strong>：用宝塔；<strong>膳食纤维 AI 25～30 g/d</strong>（可溶性：果胶半纤维素；不可溶：纤维素木质素）。</li>
+<li><strong>体力活动</strong>：MET（梅脱）表绝对强度；有氧（耐力）vs 无氧（力量）；"经常锻炼"= 每周 ≥3 次、每次 ≥30 min、中等以上强度。</li>
+<li><strong>营养教育形式</strong>：讲座、小组活动、个别劝导、培训、咨询；<strong>人际传播是最基本途径</strong>；大众传播 5 特点（单向、反馈慢等）。</li>
+<li>科普文章 5 要求：科学性、思想性、艺术性、通俗性、实用性；主题"小、尖、新"。</li>
+<li><strong>对比/速查表（烹饪方法与营养素保护）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>影响</th>
+<th>保护措施</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>煮/蒸</td>
+<td>水溶 Vit、矿物质溶于水</td>
+<td>连汤吃、控制时间</td>
+</tr>
+<tr>
+<td>煎炸炒</td>
+<td>破坏大、产丙烯醛/苯并芘</td>
+<td>上浆挂糊、急炒、控温 170-200℃</td>
+</tr>
+<tr>
+<td>烧烤/熏</td>
+<td>Vit 损失、致癌物</td>
+<td>少用明火、控温 200-400℃、少吃</td>
+</tr>
+<tr>
+<td>蔬菜</td>
+<td>先切后洗/泡→维 C 大失</td>
+<td>先洗后切、急火快炒、现做现吃</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>："先洗后切急火炒，上浆挂糊加醋好；勾芡少用碱伤维，连汤同食损失少。"</li>
+<li><strong>易错/易混提醒</strong></li>
+<li>"慎用碱"——碱破坏蛋白质和维生素，焯菜制面食尽量不用。</li>
+<li>膳食纤维分可溶（果胶、树胶）与不可溶（纤维素、木质素），两者都要吃。</li>
+<li>有氧=耐力（步行骑车游泳），无氧=力量（举重快跑）；题目常把"抗阻运动"当有氧。</li>
+<li>营养教育最基本/最重要途径是<strong>人际传播</strong>（非大众传播）。</li>
+</ul>
+<hr />
+<h2 id="4">职业模块 4 膳食指导和评估 【重要度：★★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：考点超多，<strong>食谱编制整节精读</strong>，是技能重中之重。</li>
+<li><strong>核心考点（可操作/可计算）</strong></li>
+<li><strong>DRIs 在配餐应用</strong>：EAR <strong>不用于个体配餐</strong>；RNI/AI 作为个体营养目标（达到则不足概率低）；UL 作控制上限。群体：EAR 切点法（均匀性）、概率法/营养素密度法（非均匀性）。</li>
+<li><strong>食谱编制原则</strong>：①满足营养需要；②营养素比例适宜（优质蛋白占适宜比例、植物油为主脂源）；③食物搭配合理（主副/杂粮/荤素，四大类齐全，一周不重样）；④三餐分配（早餐 30%、午+午点 40%、晚餐 30%，即 30-40-30）；⑤合理制作烹调（蒸煮炖）。</li>
+<li><strong>特殊群体要点</strong>：幼儿园三餐两点制；学生餐每份午餐钙 <strong>≥400 mg</strong>、盐 <strong>&lt;3 g</strong>，每周一次动物肝、一次海带。</li>
+<li><strong>餐次比例</strong>：两餐间隔 4～5h（不超 6h）；一般早 30%、午 30～40%、晚 30～40%。</li>
+<li><strong>蛋白质互补三原则</strong>：①种属越远越好；②种类越多越好；③同时食用最好（氨基酸血中停留约 4h）。</li>
+<li><strong>蛋白质/脂肪调整</strong>：高蛋白食物（海产畜禽肉、大豆 15～30%、谷类 6～10%）；高脂肪（油 100%、畜肉饱和脂高、坚果必需脂肪酸）；低脂肪（淀粉谷类果蔬菌藻）。</li>
+<li><strong>评价公式</strong>：重量保留率 WRF% = 熟重÷生重×100%；表观保留率 AR%、真实保留率 TR%（含重量校正）。</li>
+<li><strong>对比/速查表（餐次能量分配 &amp; DRIs 配餐应用）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>三餐比例</td>
+<td>早 30% : 午 40% : 晚 30%（学生/幼儿含午点）</td>
+</tr>
+<tr>
+<td>个体配餐</td>
+<td>RNI/AI 作目标，UL 控上限，EAR 不用</td>
+</tr>
+<tr>
+<td>群体配餐</td>
+<td>均匀性→EAR 切点法；非均匀性→概率法/营养素密度法</td>
+</tr>
+<tr>
+<td>优质蛋白</td>
+<td>动物+豆类应占膳食蛋白适宜比例（儿童 50%）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>："配餐 RNI 作目标，EAR 不把个体教；三餐三十四十三，互补远种同时好。"</li>
+<li><strong>易错/易混提醒</strong></li>
+<li><strong>EAR 不用于个体配餐</strong>（这是高频考点）；个体用 RNI/AI。</li>
+<li>学生餐每份午餐钙 ≥400 mg、盐 &lt;3 g——数值易错。</li>
+<li>蛋白质互补"同时食用最好"是因为单个氨基酸血中停留约 4h，须同时到达才互补。</li>
+<li>食谱评价先看能量是否达标，再看五大类食物是否齐全、优质蛋白占比、三餐分配。</li>
+</ul>
+<hr />
+<h2 id="5">职业模块 5 食品营养评价 【重要度：★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：考点一般，建议刷题（营养标签制作、营养价值分析）。</li>
+<li><strong>核心考点</strong></li>
+<li><strong>营养标签能量公式</strong>：能量(kcal) = 4×蛋白 + 4×碳水 + 9×脂肪 + 3×有机酸 + 7×乙醇 + 2×膳食纤维。</li>
+<li><strong>蛋白质含量</strong> = 总氮 × 6.25（动物性食物多 6.25）。</li>
+<li><strong>碳水化合物</strong>：减法（100−蛋白−脂肪−水分−灰分，扣除膳食纤维）或加法（淀粉+糖）。</li>
+<li><strong>营养声称</strong>：含量声称（高/低/无）、比较声称（多于/少于）、属性声称（强化/脱脂/瘦）。</li>
+<li><strong>INQ 营养质量指数</strong> = 营养素密度 ÷ 能量密度：INQ=1 相当、&lt;1 不足/供能过剩、&gt;1 合格（因人而异）。</li>
+<li><strong>氨基酸评分 AAS</strong>：与参考模式比，最低比值者为<strong>第一限制氨基酸</strong>，其评分即该蛋白评分。</li>
+<li><strong>蛋白质分类</strong>：完全（蛋肉）、半完全（植物，维持生命不促生长）、不完全（胶原蛋白，既不维持也不促长）。</li>
+<li><strong>GI/GL</strong>：高 GI &gt;70、中 55～70、低 &lt;55；GL = GI × 实际可利用碳水(g)，高 &gt;20、中 10～20、低 &lt;10。</li>
+<li><strong>脂肪酸比例</strong>：S∶M∶P = 1∶1∶1；n-6 与 n-3 适宜比例。</li>
+<li><strong>对比/速查表（GI/GL 分级 &amp; 蛋白质分类）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>分级标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GI</td>
+<td>高 &gt;70；中 55～70；低 &lt;55</td>
+</tr>
+<tr>
+<td>GL</td>
+<td>高 &gt;20；中 10～20；低 &lt;10</td>
+</tr>
+<tr>
+<td>蛋白质</td>
+<td>完全（蛋肉）/半完全（植物）/不完全（胶原）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>："标签能量四九四，氮乘六点二五；INQ 大于一是合格，GI 七十高分界。"</li>
+<li><strong>易错/易混提醒</strong></li>
+<li>能量折算：脂肪 9、蛋白/碳水 4、有机酸 3、乙醇 7、膳食纤维 2（不是 4）。</li>
+<li>INQ &gt;1 为"营养质量合格食物"，但<strong>对同一食物不同人群结论可不同</strong>（肥胖者可能不合格）。</li>
+<li>第一限制氨基酸由 AAS 最低比值决定（如谷类第一限制氨基酸是赖氨酸）。</li>
+<li>GL 体现"数量"对血糖影响，低 GI 但吃多也可能高 GL。</li>
+</ul>
+<hr />
+<h2 id="6">职业模块 6 社区营养管理和营养干预 【重要度：★★】</h2>
+<ul>
+<li><strong>重要度依据</strong>：考点一般，建议刷题（信息收集、档案、干预方案）。</li>
+<li><strong>核心考点</strong></li>
+<li><strong>调查表编制原则</strong>：相关性、客观性、适宜性、全面性、设计合理性、可比性；答案具穷尽性 + 互斥性；封闭式前置、敏感题最后。</li>
+<li><strong>健康档案</strong>：以问题为中心（基本资料、问题目录、SOAP 问题描述、病情流程表）；SOAP = 主观 S / 客观 O / 评估 A / 计划 P。</li>
+<li><strong>统计指标</strong>：构成比（部分/整体，不表频率）、比（相对比）、率（频率强度）；发病率（新病例/暴露人口，动态）、患病率（新旧病例/观察人口，横断面静态）。</li>
+<li><strong>营养干预设计</strong>：类型（随机对照试验、类实验）；策略（政策环境、营养教育、行为干预、食物营养干预如强化/补充/庭院种植）；步骤（社区诊断→制定目标→确定目标人群→干预计划选择→确定方案）。</li>
+<li><strong>社区动员 5 方面</strong>、社区营养管理 5 步骤（同模块 3/第七章）。</li>
+<li><strong>运动指南</strong>：中等强度 4～7 kcal/min（快走 5.5～6 km/h，最大心率 60～70%）；每天 30～60 min 或每周 ≥150 min，每次 ≥10 min；每周 5～7 天。</li>
+<li><strong>对比/速查表（发病率 vs 患病率）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>分子</th>
+<th>性质</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>发病率</td>
+<td>一定时期新病例数</td>
+<td>动态（发病报告/队列）</td>
+</tr>
+<tr>
+<td>患病率</td>
+<td>特定时间新旧病例数</td>
+<td>静态（横断面调查）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>记忆口诀</strong>："档案 SOAP 四步走，构成比是部分有；发病新病例动态，患病新旧横断面。"</li>
+<li><strong>易错/易混提醒</strong></li>
+<li>构成比（如女性占 56.9%）<strong>不能说明发生频率</strong>，易与率混淆。</li>
+<li>发病率（新发、动态）与患病率（新旧、静态）分子不同，考题常互换设陷阱。</li>
+<li>干预策略中"食物营养干预"包含食品强化、营养素补充剂、庭院种植等，不同于单纯"营养教育"。</li>
+<li>调查表答案须同时满足"穷尽性"（含"其他"）与"互斥性"。</li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>使用建议</strong>：本手册每章均含"核心考点 + 速查表 + 口诀 + 易错提醒"四件套，建议先按重要度（★★★优先）通读，再针对表格与口诀集中背诵，最后用易错提醒做错题归因。技能模块重点练"算"（人日数、标准人、BMI、能量公式、INQ、GI/GL）与"编"（食谱编制原则与餐次比）。</p>
+</blockquote></div></main><div id="installHint"><span class="txt">📲 添加到主屏幕：安卓点浏览器菜单→<b>安装应用</b>；iPhone 点<b>分享→添加到主屏幕</b></span><button id="instBtn" style="display:none">安装</button><button class="x" id="instX">×</button></div><script>
+// 倒计时
+(function(){var d=new Date('2026-12-26T09:00:00');function u(){var n=new Date();var x=Math.ceil((d-n)/86400000);
+var el=document.getElementById('cd');if(el)el.textContent=x>0?('距 12-26 考试还有 '+x+' 天'):'今天考试，加油！';}
+u();setInterval(u,3600000);})();
+// 章节 -> 可折叠 details
+(function(){
+  var hb=document.getElementById('handbook-body');if(!hb)return;
+  var hs=Array.prototype.slice.call(hb.querySelectorAll('h2'));
+  var chips=[];
+  hs.forEach(function(h){
+    var m=h.textContent.match(/【重要度：([★]+)】/);if(!m)return;
+    var lv=m[1].length;
+    var rawName=h.textContent.replace(/【重要度：([★]+)】/,'').replace(/^第.{1,3}章\s*/,'').trim();
+    var det=document.createElement('details');det.className='chap lv'+lv;if(lv===3)det.open=true;
+    var nodes=[h];var n=h.nextElementSibling;
+    while(n&&!n.matches('h2')){nodes.push(n);n=n.nextElementSibling;}
+    nodes.forEach(function(nd){det.appendChild(nd);});
+    h.parentNode.insertBefore(det,h);
+    h.innerHTML=h.innerHTML.replace(/【重要度：([★]+)】/,'')+'<span class="badge lv'+lv+'">'+m[1]+'</span>';
+    if(h.id)det.id=h.id;
+    var icon=lv===3?'🔴':(lv===2?'🟠':'🔵');
+    chips.push('<a href="#'+h.id+'">'+icon+rawName.slice(0,8)+'</a>');
+  });
+  var q=document.getElementById('quick');
+  chips.forEach(function(c){q.insertAdjacentHTML('beforeend',c);});
+})();
+// 点快捷跳转时展开对应 details
+document.getElementById('quick').addEventListener('click',function(e){
+  var a=e.target.closest('a');if(!a)return;var id=a.getAttribute('href').slice(1);
+  var el=document.getElementById(id);if(el&&el.tagName==='DETAILS')el.open=true;
+});
+// Service Worker 注册（离线 + 可安装）
+if('serviceWorker' in navigator){window.addEventListener('load',function(){
+  navigator.serviceWorker.register('sw.js').catch(function(){});});}
+// 安装提示
+var deferred=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;
+  document.getElementById('instBtn').style.display='block';});
+document.getElementById('instBtn').addEventListener('click',function(){
+  if(!deferred)return;deferred.prompt();deferred.userChoice.then(function(){deferred=null;
+  document.getElementById('instBtn').style.display='none';});});
+document.getElementById('instX').addEventListener('click',function(){
+  document.getElementById('installHint').style.display='none';});
+</script></body></html>

@@ -1,0 +1,16 @@
+{
+  "name":"营养师三级 · 应试宝典",
+  "short_name":"营养三级",
+  "description":"公共营养师三级考试备考：74天进度表 + 考点速查",
+  "start_url":".",
+  "scope":".",
+  "display":"standalone",
+  "orientation":"portrait",
+  "background_color":"#fbfaf5",
+  "theme_color":"#1f9d6b",
+  "icons":[
+    {"src":"icon-192.png","sizes":"192x192","type":"image/png"},
+    {"src":"icon-512.png","sizes":"512x512","type":"image/png"},
+    {"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}
