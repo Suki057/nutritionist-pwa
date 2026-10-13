@@ -34,6 +34,46 @@ a{color:var(--green-d);text-decoration:none}
   display:flex;flex-direction:column;align-items:center;gap:2px;color:#8a917f;font-size:12.5px}
 .tabbar button .ic{font-size:21px;line-height:1}
 .tabbar button.active{color:var(--green-d);font-weight:800}
+/* ===== 随机试题 ===== */
+.quiz-head{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);
+  padding:12px 14px 10px;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.quiz-head h2{margin:0 0 2px;font-size:18px;color:var(--green-d)}
+.quiz-sub{margin:0;font-size:12px;color:#9a8f6a}
+.quiz-bar{display:flex;align-items:center;gap:10px;margin-top:9px;flex-wrap:wrap}
+.quiz-stat{font-size:13px;font-weight:700;color:var(--ink);background:var(--soft);
+  border-radius:10px;padding:4px 10px}
+#quiz-score{color:#fff;background:var(--green-d);border:none}
+.quiz-btn{margin-left:auto;font-family:inherit;font-size:13px;font-weight:700;color:#fff;
+  background:var(--blue);border:none;border-radius:10px;padding:6px 12px;cursor:pointer}
+.quiz-btn:active{opacity:.85}
+.quiz-body{padding:12px 12px 90px}
+.q-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 14px;
+  margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.03)}
+.q-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.q-tag{font-size:11px;font-weight:800;color:#fff;background:var(--blue);border-radius:8px;padding:2px 7px}
+.q-tag.multi{background:var(--orange)}
+.q-num{font-size:12px;color:#9a8f6a;font-weight:700}
+.q-text{font-size:15px;font-weight:700;color:var(--ink);line-height:1.5;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.q-opt{display:flex;align-items:flex-start;gap:9px;text-align:left;font-family:inherit;font-size:14px;
+  color:var(--ink);background:#f7f9f3;border:1.5px solid var(--line);border-radius:11px;
+  padding:10px 11px;cursor:pointer;line-height:1.45;transition:background .12s,border-color .12s}
+.q-opt .lab{flex:0 0 auto;font-weight:800;color:var(--blue)}
+.q-card.multi .q-opt .lab{color:var(--orange)}
+.q-opt.sel{background:var(--soft);border-color:var(--blue)}
+.q-opt.right{background:#e8f7ee;border-color:var(--green-d)}
+.q-opt.right .lab{color:var(--green-d)}
+.q-opt.wrong{background:#fdecec;border-color:#e06a6a}
+.q-opt.wrong .lab{color:#d04545}
+.q-opt.locked{cursor:default}
+.q-submit{margin-top:10px;align-self:flex-start;font-family:inherit;font-size:13px;font-weight:700;
+  color:#fff;background:var(--green-d);border:none;border-radius:10px;padding:6px 16px;cursor:pointer}
+.q-submit:active{opacity:.85}
+.q-feedback{margin-top:11px;padding:10px 12px;border-radius:11px;font-size:13.5px;line-height:1.55;
+  background:#fbf7ee;border:1px solid #efe3c4;color:#6b5b2e}
+.q-feedback.ok{background:#eef9f1;border-color:#bfe6cd;color:#2f7d4e}
+.q-feedback b{color:inherit}
+.q-feedback .ans{font-weight:800}
 #src{display:none}
 #hb-home{padding-top:2px}
 #hb-overview{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.03)}
@@ -1283,7 +1323,19 @@ hr{border:none;border-top:1px dashed var(--line);margin:8px 0}
     <div class="note" id="bk-skill-note"></div>
   </div>
 </section>
-</main><nav class="tabbar" id="tabbar"><button data-view="progress" class="active"><span class="ic">📅</span>进度</button><button data-view="handbook"><span class="ic">📚</span>考点手册</button><button data-view="basic"><span class="ic">📖</span>基础</button><button data-view="skill"><span class="ic">🛠</span>技能</button></nav><script>
+<section id="view-quiz" class="view" hidden>
+  <div class="quiz-head">
+    <h2>🧠 随机试题</h2>
+    <p class="quiz-sub">从基础与技能知识点随机抽取 · 每次 30 题（单选 20 + 多选 10）</p>
+    <div class="quiz-bar">
+      <span id="quiz-progress" class="quiz-stat">已答 0 / 30</span>
+      <span id="quiz-score" class="quiz-stat">得分 0</span>
+      <button id="quiz-reset" class="quiz-btn" type="button">重新随机抽题</button>
+    </div>
+  </div>
+  <div id="quiz-body" class="quiz-body"></div>
+</section>
+</main><nav class="tabbar" id="tabbar"><button data-view="quiz"><span class="ic">🧠</span>随机试题</button><button data-view="progress" class="active"><span class="ic">📅</span>进度</button><button data-view="handbook"><span class="ic">📚</span>考点手册</button><button data-view="basic"><span class="ic">📖</span>基础</button><button data-view="skill"><span class="ic">🛠</span>技能</button></nav><script>
 // 倒计时
 (function(){var d=new Date('2026-12-26T09:00:00');function u(){var n=new Date();var x=Math.ceil((d-n)/86400000);
 var el=document.getElementById('cd');if(el)el.textContent=x>0?('距 12-26 考试还有 '+x+' 天'):'今天考试，加油！';}
@@ -1296,9 +1348,10 @@ u();setInterval(u,3600000);})();
     tabs.forEach(function(x){x.classList.remove('active');});
     b.classList.add('active');
     var v=b.getAttribute('data-view');
-    ['progress','handbook','basic','skill'].forEach(function(id){
+    ['quiz','progress','handbook','basic','skill'].forEach(function(id){
       document.getElementById('view-'+id).hidden=(v!==id);
     });
+    if(v==='quiz'){ if(window.__loadQuiz) window.__loadQuiz(); }
     if(v==='basic'){var bh=document.getElementById('bk-basic-home');if(bh){bh.style.display='';document.getElementById('bk-basic-sections').hidden=true;document.getElementById('bk-basic-content').hidden=true;}}
     if(v==='skill'){var sh=document.getElementById('bk-skill-home');if(sh){sh.style.display='';document.getElementById('bk-skill-units').hidden=true;document.getElementById('bk-skill-content').hidden=true;}}
     window.scrollTo(0,0);
@@ -1527,9 +1580,91 @@ u();setInterval(u,3600000);})();
   }).catch(function(e){console.warn('notes_data.json 加载失败',e);});
 })();
 
+// 随机试题：抽题 / 答题 / 判分 / 错显正确答案
+(function(){
+  var BANK=null, pending=false;
+  var PICK={single:20, multi:10};
+  function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function shuffleQ(q){
+    var arr=q.options.map(function(o,i){return {t:o,ok:q.answer.indexOf(i)>=0};});
+    arr=shuffle(arr);
+    return {q:q.q, type:q.answer.length>1?'multi':'single',
+      options:arr.map(function(x){return x.t;}),
+      answer:arr.map(function(x,i){return x.ok?i:-1;}).filter(function(x){return x>=0;}),
+      explain:q.explain};
+  }
+  function pick(items,n){return shuffle(items).slice(0,n);}
+  function letter(i){return 'ABCDEFGH'[i];}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function setStats(answered,correct){
+    var p=document.getElementById('quiz-progress'); if(p)p.textContent='已答 '+answered+' / 30';
+    var s=document.getElementById('quiz-score'); if(s)s.textContent='得分 '+correct;
+  }
+  function grade(card,q,singleChosen,multiChosen,opts,fb,state){
+    var chosen=(singleChosen!==null)?[singleChosen]:(multiChosen||[]);
+    var correctSet=q.answer.slice().sort(function(a,b){return a-b;}).join(',');
+    var chosenSet=chosen.slice().sort(function(a,b){return a-b;}).join(',');
+    var isRight=(chosen.length>0)&&(chosenSet===correctSet);
+    card.classList.add('locked');
+    opts.forEach(function(b){b.classList.add('locked');});
+    q.answer.forEach(function(i){if(opts[i])opts[i].classList.add('right');});
+    if(!isRight && singleChosen!==null && opts[singleChosen]) opts[singleChosen].classList.add('wrong');
+    if(!isRight && multiChosen) multiChosen.forEach(function(i){if(q.answer.indexOf(i)<0 && opts[i])opts[i].classList.add('wrong');});
+    var ansTxt=q.answer.map(function(i){return letter(i);}).join('、');
+    fb.innerHTML='<b>'+(isRight?'✅ 回答正确':'❌ 回答错误')+'</b>　正确答案：<span class="ans">'+ansTxt+'</span><br>'+esc(q.explain);
+    fb.hidden=false;
+    if(!card.dataset.counted){card.dataset.counted='1';state.answered++;if(isRight)state.correct++;setStats(state.answered,state.correct);}
+  }
+  function buildSession(){
+    var list=shuffle(pick(BANK.single,PICK.single).map(shuffleQ).concat(pick(BANK.multi,PICK.multi).map(shuffleQ)));
+    var body=document.getElementById('quiz-body'); if(!body)return; body.innerHTML='';
+    var state={answered:0,correct:0}, idx=0;
+    list.forEach(function(q){
+      idx++;
+      var isMulti=q.type==='multi';
+      var card=document.createElement('div');
+      card.className='q-card'+(isMulti?' multi':'');
+      var optsHtml='';
+      q.options.forEach(function(o,i){optsHtml+='<button type="button" class="q-opt" data-i="'+i+'"><span class="lab">'+letter(i)+'</span><span class="txt">'+esc(o)+'</span></button>';});
+      card.innerHTML='<div class="q-top"><span class="q-tag'+(isMulti?' multi':'')+'">'+(isMulti?'多选':'单选')+'</span><span class="q-num">第 '+idx+' 题</span></div>'+
+        '<div class="q-text">'+esc(q.q)+'</div><div class="q-opts">'+optsHtml+'</div>'+
+        (isMulti?'<button type="button" class="q-submit">提交本题</button>':'')+
+        '<div class="q-feedback" hidden></div>';
+      body.appendChild(card);
+      var fb=card.querySelector('.q-feedback');
+      var opts=[].slice.call(card.querySelectorAll('.q-opt'));
+      if(!isMulti){
+        opts.forEach(function(btn){btn.addEventListener('click',function(){
+          if(card.classList.contains('locked'))return;
+          grade(card,q,parseInt(btn.getAttribute('data-i'),10),null,opts,fb,state);
+        });});
+      }else{
+        card.querySelector('.q-submit').addEventListener('click',function(){
+          if(card.classList.contains('locked'))return;
+          var chosen=opts.filter(function(b){return b.classList.contains('sel');}).map(function(b){return parseInt(b.getAttribute('data-i'),10);});
+          if(chosen.length===0)return;
+          grade(card,q,null,chosen,opts,fb,state);
+        });
+        opts.forEach(function(btn){btn.addEventListener('click',function(){
+          if(card.classList.contains('locked'))return;
+          btn.classList.toggle('sel');
+        });});
+      }
+    });
+    setStats(0,0);
+  }
+  function loadQuiz(){
+    if(!BANK){pending=true;return;}
+    pending=false; buildSession();
+  }
+  window.__loadQuiz=loadQuiz;
+  fetch('quiz_data.json').then(function(r){return r.json();}).then(function(d){BANK=d;if(pending)loadQuiz();}).catch(function(e){console.warn('quiz_data.json 加载失败',e);});
+  var rb=document.getElementById('quiz-reset'); if(rb)rb.addEventListener('click',function(){if(BANK)buildSession();else pending=true;});
+})();
+
 // 右滑返回上一屏（移动端手势）
 (function(){
-  var TAB_ORDER=['progress','handbook','basic','skill'];
+  var TAB_ORDER=['quiz','progress','handbook','basic','skill'];
   function activeView(){
     for(var i=0;i<TAB_ORDER.length;i++){
       var el=document.getElementById('view-'+TAB_ORDER[i]);

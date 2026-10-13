@@ -1,5 +1,5 @@
-const CACHE='nutri3-v8';
-const ASSETS=['./','./index.html','./notes_data.json','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+const CACHE='nutri3-v9';
+const ASSETS=['./','./index.html','./notes_data.json','./quiz_data.json','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',function(e){e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(ASSETS);}).then(function(){return self.skipWaiting();}));});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.map(function(k){return k!==CACHE?caches.delete(k):null;}));}).then(function(){return self.clients.claim();}));});
 self.addEventListener('fetch',function(e){if(e.request.method!=='GET')return;
