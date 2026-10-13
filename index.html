@@ -65,6 +65,8 @@ a{color:var(--green-d);text-decoration:none}
 .q-opt.right .lab{color:var(--green-d)}
 .q-opt.wrong{background:#fdecec;border-color:#e06a6a}
 .q-opt.wrong .lab{color:#d04545}
+.q-opt.miss{background:#fff5e6;border-color:#e8a23d}
+.q-opt.miss .lab{color:#c87f12}
 .q-opt.locked{cursor:default}
 .q-submit{margin-top:10px;align-self:flex-start;font-family:inherit;font-size:13px;font-weight:700;
   color:#fff;background:var(--green-d);border:none;border-radius:10px;padding:6px 16px;cursor:pointer}
@@ -74,6 +76,7 @@ a{color:var(--green-d);text-decoration:none}
 .q-feedback.ok{background:#eef9f1;border-color:#bfe6cd;color:#2f7d4e}
 .q-feedback b{color:inherit}
 .q-feedback .ans{font-weight:800}
+.q-feedback .you{font-weight:800;color:#b06a00}
 #src{display:none}
 #hb-home{padding-top:2px}
 #hb-overview{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.03)}
@@ -1586,11 +1589,11 @@ u();setInterval(u,3600000);})();
   var PICK={single:20, multi:10};
   function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
   function shuffleQ(q){
-    var arr=q.options.map(function(o,i){return {t:o,ok:q.answer.indexOf(i)>=0};});
-    arr=shuffle(arr);
+    // 题目随机抽（见 buildSession）；但选项保持题库固定顺序——真实考试里选项位置是固定的，
+    // 乱序反而会让人凭字母选错、且对不上“正确答案”提示，故取消选项打乱。
     return {q:q.q, type:q.answer.length>1?'multi':'single',
-      options:arr.map(function(x){return x.t;}),
-      answer:arr.map(function(x,i){return x.ok?i:-1;}).filter(function(x){return x>=0;}),
+      options:q.options.slice(),
+      answer:q.answer.slice(),
       explain:q.explain};
   }
   function pick(items,n){return shuffle(items).slice(0,n);}
@@ -1607,11 +1610,17 @@ u();setInterval(u,3600000);})();
     var isRight=(chosen.length>0)&&(chosenSet===correctSet);
     card.classList.add('locked');
     opts.forEach(function(b){b.classList.add('locked');});
-    q.answer.forEach(function(i){if(opts[i])opts[i].classList.add('right');});
-    if(!isRight && singleChosen!==null && opts[singleChosen]) opts[singleChosen].classList.add('wrong');
-    if(!isRight && multiChosen) multiChosen.forEach(function(i){if(q.answer.indexOf(i)<0 && opts[i])opts[i].classList.add('wrong');});
+    // 标注：选对的正确项(绿right)；正确但漏选(橙miss·该选未选)；误选(红wrong)
+    q.answer.forEach(function(i){
+      if(!opts[i])return;
+      if(chosen.indexOf(i)>=0) opts[i].classList.add('right');
+      else opts[i].classList.add('miss');
+    });
+    if(singleChosen!==null && opts[singleChosen] && q.answer.indexOf(singleChosen)<0) opts[singleChosen].classList.add('wrong');
+    if(multiChosen) multiChosen.forEach(function(i){ if(q.answer.indexOf(i)<0 && opts[i]) opts[i].classList.add('wrong'); });
     var ansTxt=q.answer.map(function(i){return letter(i);}).join('、');
-    fb.innerHTML='<b>'+(isRight?'✅ 回答正确':'❌ 回答错误')+'</b>　正确答案：<span class="ans">'+ansTxt+'</span><br>'+esc(q.explain);
+    var yourTxt=(chosen.length>0)? chosen.map(function(i){return letter(i);}).join('、') : '未作答';
+    fb.innerHTML='<b>'+(isRight?'✅ 回答正确':'❌ 回答错误')+'</b>　你的答案：<span class="you">'+yourTxt+'</span>　正确答案：<span class="ans">'+ansTxt+'</span><br>'+esc(q.explain);
     fb.hidden=false;
     if(!card.dataset.counted){card.dataset.counted='1';state.answered++;if(isRight)state.correct++;setStats(state.answered,state.correct);}
   }
