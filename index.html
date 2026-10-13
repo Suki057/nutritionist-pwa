@@ -124,6 +124,11 @@ hr{border:none;border-top:1px dashed var(--line);margin:8px 0}
 .note .col-blue2{color:#16429c!important}
 .note .col-green{color:#0f8a4a!important}
 .note .col-blk{color:#2f3327!important}
+/* PDF 提取表格 */
+.tbl-wrap{overflow-x:auto;margin:4px 0 14px;-webkit-overflow-scrolling:touch}
+.note-tbl{border-collapse:collapse;width:100%;font-size:13.5px;line-height:1.65;color:#2f3327}
+.note-tbl td{border:1px solid var(--line);padding:6px 9px;vertical-align:top;text-align:left;word-break:break-word}
+.note-tbl tr:first-child td{background:#f4f2e9}
 </style></head><body><header class="appbar"><h1>🌿 营养师三级 · 应试宝典</h1><span class="cd" id="cd">距考试 — 天</span></header><main id="top"><section id="view-progress" class="view"><div class="hero"><h2>74天冲刺计划</h2><p>2026-10-13 起 · 每天 1.5–2 小时 · 三阶段法（打基础→巩固→冲刺）</p></div><div class="sect-title" id="sched">📅 备考进度表</div><p class="note">今天起到 12/26 考试共 <b>74 个学习日</b>。工作日 1.5h、周末 2h，约 120+ 小时。计划可依进度微调。</p><div class="phase">
 <div class="phase-head"><h3>第一阶段 · 打基础（精读+理解+章节题）</h3><span class="phase-span">10/13 – 11/15（约34天）</span></div>
 <p class="phase-goal">按重要度通读9章理论，建立框架，标注高频数据，每章配套章节题。</p>
@@ -1357,38 +1362,83 @@ u();setInterval(u,3600000);})();
   var LVS={1:3,2:3,3:3,4:3,5:2,6:2};
   function stars(n){return n===3?'★★★':n===2?'★★':'★';}
   function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-  // 把一行文本按序号(1)(2)（一）① 1. 等切成多个独立条目；仅在行首或分隔符后拆分，避免误切
-  function splitItems(txt){
-    var re=/[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭]|（[一二三四五六七八九十]+）|[一二三四五六七八九十]+、|\d+\.|（\d+）|\(\d+\)/g;
-    var items=[], last=0, m, prev, lastCh;
-    while((m=re.exec(txt))){
+  // ===== 新数据格式渲染（2026-10-13 重写） =====
+  // 段落 item = [[text,color],...]（逐字颜色 run）
+  // 表格 item = {table:[[cell,...],...]}，cell 也是 [[text,color],...]
+  function runsToHtml(runs){
+    var h='';
+    (runs||[]).forEach(function(r){
+      var t=r[0]||'', c=r[1]||'blk';
+      if(!t) return;
+      h+='<span class="col-'+c+'">'+esc(t)+'</span>';
+    });
+    return h;
+  }
+  // 截取绝对字符区间 [start,end)，保留逐字颜色 run
+  function sliceRun(runs,start,end){
+    var out=[], off=0;
+    for(var i=0;i<runs.length && off<end;i++){
+      var t=runs[i][0]||'', c=runs[i][1]||'blk';
+      var r0=Math.max(start,off), r1=Math.min(end,off+t.length);
+      if(r1>r0) out.push([t.slice(r0-off,r1-off), c]);
+      off+=t.length;
+    }
+    return out;
+  }
+  // 把一段文本按序号切成多个逻辑条目：
+  // 清晰标记 ①②/（一）/（1）/一、 总是拆；仅 \d+. 与 (n) 在行内突兀出现时不拆（避免 维生素B1. 误切）
+  function splitRuns(runs){
+    var full=''; runs.forEach(function(r){full+=(r[0]||'');});
+    if(!full.trim()) return [runs];
+    var re=/([①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭])|（([一二三四五六七八九十]+)）|([一二三四五六七八九十]+)、|(\d+)\.|（(\d+)）|\((\d+)\)/g;
+    var segs=[], last=0, m;
+    while((m=re.exec(full))){
       var start=m.index;
-      prev=txt.slice(0,start).replace(/\s+$/,'');
-      lastCh=prev.slice(-1);
-      if(start>0 && !/[\s；，、;,(（]/.test(lastCh)) continue; // 行内突兀出现的序号不拆分
-      if(start>last){var seg=txt.slice(last,start).trim(); if(seg) items.push(seg);}
+      var type= m[1]!=null?'cir': m[2]!=null?'cn': m[3]!=null?'cn2': m[4]!=null?'num': m[5]!=null?'paren':'paren2';
+      var prev=full.slice(0,start).replace(/\s+$/,'');
+      var lastCh=prev.slice(-1);
+      var needSep=(type==='num'||type==='paren2');
+      if(needSep && start>0 && !/[\s；，、;,(（:：]/.test(lastCh)) continue; // 行内突兀的序号不拆
+      if(start>last){ var seg=sliceRun(runs,last,start); if(seg.length) segs.push(seg); }
       last=start;
     }
-    var tail=txt.slice(last).trim();
-    if(tail) items.push(tail);
-    return items.length?items:[txt.trim()].filter(Boolean);
+    var tail=sliceRun(runs,last,full.length);
+    if(tail.length) segs.push(tail);
+    return segs.length?segs:[runs];
   }
-  function renderItem(it,col){
-    if(/^[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭]/.test(it)) return '<p class="li cir '+col+'">'+esc(it)+'</p>';
-    if(/^（[一二三四五六七八九十]+）/.test(it)) return '<p class="ol2 '+col+'">'+esc(it)+'</p>';
-    if(/^[一二三四五六七八九十]+、/.test(it)) return '<h4 class="ol1 '+col+'">'+esc(it)+'</h4>';
-    var mm=it.match(/^(\d+)\.\s*([\s\S]*)$/);
-    if(mm) return '<p class="li num '+col+'"><b>'+esc(mm[1])+'.</b> '+esc(mm[2])+'</p>';
-    if(/^（\d+）|^\d+\)/.test(it)) return '<p class="li paren '+col+'">'+esc(it)+'</p>';
-    return '<p class="para '+col+'">'+esc(it)+'</p>';
+  // 渲染单个逻辑条目（已含逐字颜色 run）
+  function renderSeg(seg){
+    if(!seg||!seg.length) return '';
+    var full=''; seg.forEach(function(r){full+=(r[0]||'');});
+    if(!full.trim()) return '';
+    if(/^[①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭]/.test(full)) return '<p class="li cir">'+runsToHtml(seg)+'</p>';
+    if(/^（[一二三四五六七八九十]+）/.test(full)) return '<p class="ol2">'+runsToHtml(seg)+'</p>';
+    if(/^[一二三四五六七八九十]+、/.test(full)) return '<h4 class="ol1">'+runsToHtml(seg)+'</h4>';
+    var mm=full.match(/^(\d+)\./);
+    if(mm){ var lead=mm[0].length; var pre=sliceRun(seg,0,lead), rest=sliceRun(seg,lead,full.length);
+      return '<p class="li num"><b>'+runsToHtml(pre)+'</b> '+runsToHtml(rest)+'</p>'; }
+    if(/^（\d+）|^\(\d+\)/.test(full)) return '<p class="li paren">'+runsToHtml(seg)+'</p>';
+    return '<p class="para">'+runsToHtml(seg)+'</p>';
+  }
+  function renderTable(tbl){
+    var h='<div class="tbl-wrap"><table class="note-tbl">';
+    (tbl||[]).forEach(function(row){
+      h+='<tr>';
+      (row||[]).forEach(function(cell){ h+='<td>'+runsToHtml(cell)+'</td>'; });
+      h+='</tr>';
+    });
+    h+='</table></div>';
+    return h;
   }
   function fmtNote(content){
     if(!content||!content.length) return '<p class="para col-blk">（本节暂无正文）</p>';
     var h='';
-    content.forEach(function(line){
-      var txt=line.t||''; var col='col-'+(line.c||'blk');
-      if(!txt.trim()) return;
-      splitItems(txt).forEach(function(it){ h+=renderItem(it,col); });
+    content.forEach(function(item){
+      if(item && typeof item==='object' && !Array.isArray(item) && item.table){
+        h+=renderTable(item.table); return; // 表格
+      }
+      if(!Array.isArray(item) || !item.length) return; // 段落（颜色 run 列表）
+      splitRuns(item).forEach(function(seg){ h+=renderSeg(seg); });
     });
     return h;
   }
