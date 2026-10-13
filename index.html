@@ -1633,14 +1633,37 @@ u();setInterval(u,3600000);})();
       if(list.length>0){ var b=document.createElement('span'); b.className='badge'; b.textContent=list.length>99?'99+':list.length; tab.appendChild(b); }
     }
   }
-  // 答错：加入错题集（已存在则重置连续正确计数）
+  // 归一化题目文本（去空白），用于“同题去重”——不同 id 但同一道题在错题集只留一道
+  function normQ(s){ return String(s||'').replace(/\s+/g,''); }
+  // 答错：加入错题集（按题目文本去重；已存在则重置连对计数并刷新内容）
   function addWrong(q, type){
-    if(!q||!q.id) return;
+    if(!q||!q.q) return;
+    var key=normQ(q.q);
     var list=loadWrong(), ex=null;
-    for(var i=0;i<list.length;i++){ if(list[i].id===q.id){ex=list[i];break;} }
-    if(ex){ ex.streak=0; }
-    else { list.push({id:q.id, type:type, q:q.q, options:q.options, answer:q.answer, explain:q.explain, streak:0}); }
+    for(var i=0;i<list.length;i++){ if(normQ(list[i].q)===key){ex=list[i];break;} }
+    if(ex){
+      ex.streak=0;
+      // 刷新为最新一份（题库更新后内容可能变），保留唯一条目
+      if(q.id) ex.id=q.id; if(type) ex.type=type;
+      ex.options=q.options; ex.answer=q.answer; ex.explain=q.explain;
+    } else {
+      list.push({id:q.id, type:type, q:q.q, options:q.options, answer:q.answer, explain:q.explain, streak:0});
+    }
     saveWrong(list); updateWrongBadge();
+  }
+  // 一次性清理：把历史遗留的“同题多条”合并为一条（保留连对进度最高的一条）
+  function dedupeWrong(){
+    var list=loadWrong(), seen={}, out=[];
+    for(var i=0;i<list.length;i++){
+      var k=normQ(list[i].q); if(!k) continue;
+      if(!seen[k]){ seen[k]={idx:out.length, streak:list[i].streak||0}; out.push(list[i]); }
+      else {
+        var e=out[seen[k].idx];
+        if((list[i].streak||0)>(e.streak||0)){ list[i].streak=e.streak; out[seen[k].idx]=list[i]; }
+      }
+    }
+    if(out.length!==list.length){ saveWrong(out); }
+    return out.length;
   }
   // 答对：连续+1，满 3 移除；返回 {streak, removed}
   function markRight(id){
@@ -1831,6 +1854,7 @@ u();setInterval(u,3600000);})();
   // ---------- 数据加载 ----------
   fetch('quiz_data.json').then(function(r){return r.json();}).then(function(d){
     BANK=d;
+    dedupeWrong();   // 合并历史遗留的同题多条错题
     // 轮数按题库大小动态计算：保证三类题各自都能在 TOTAL_ROUNDS 组内轮完
     TOTAL_ROUNDS=Math.max(
       Math.ceil(BANK.single.length/BATCH.single),

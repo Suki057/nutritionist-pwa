@@ -562,7 +562,7 @@ multi = [
 
  # —— 技能模块1-4（28，★★★） ——
  {"q":"膳食调查方法包括（ ）。","options":["称重法","记账法","24h回顾法","食物频率法"],"answer":[0,1,2,3],"explain":"常用四法加化学分析、膳食史法。"},
- {"q":"关于24h回顾法，说法正确的有（ ）。","options":["连续3天","不适合7岁以下","不适合75岁以上","用家用量具估量"],"answer":[0,1,2,3],"explain":"回顾法3天，不适合老幼。"},
+ {"q":"膳食调查中，关于24h回顾法，正确的有（ ）。","options":["连续3天","不适合7岁以下","不适合75岁以上","用家用量具估量"],"answer":[0,1,2,3],"explain":"回顾法3天，不适合老幼。"},
  {"q":"人日数计算涉及（ ）。","options":["个人人日数=各餐餐次比之和","在外就餐计入","集体用总人日数","标准人折算"],"answer":[0,1,2,3],"explain":"人日数含餐次比、在外就餐、总人日、标准人。"},
  {"q":"体格测量的常用指标包括（ ）。","options":["身高体重","BMI","上臂围","皮褶厚度"],"answer":[0,1,2,3],"explain":"以上均为体格测量指标。"},
  {"q":"关于BMI，说法正确的有（ ）。","options":["=体重/身高²","＜18.5消瘦","24～28超重","≥28肥胖"],"answer":[0,1,2,3],"explain":"BMI分级正确。"},
@@ -752,7 +752,17 @@ judge = [
  {"q":"营养标签能量折算中脂肪为9kcal/g、蛋白质与碳水为4kcal/g。","options":["正确","错误"],"answer":[0],"explain":"产能系数正确。"},
 ]
 
-# ============ 校验 & 输出 ============
+# ============ 去重 & 校验 & 输出 ============
+def dedup(lst):
+    seen=set(); out=[]
+    for q in lst:
+        key=q["q"].strip()
+        if key in seen:
+            print("  去重丢弃:", key[:40]); continue
+        seen.add(key); out.append(q)
+    return out
+single=dedup(single); multi=dedup(multi); judge=dedup(judge)
+
 def add_id(lst, prefix):
     typ={'s':'single','m':'multi','j':'judge'}[prefix]
     out=[]
