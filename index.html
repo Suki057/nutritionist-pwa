@@ -1361,7 +1361,7 @@ hr{border:none;border-top:1px dashed var(--line);margin:8px 0}
   </div>
   <div id="wrong-body" class="quiz-body"></div>
 </section>
-</main><nav class="tabbar" id="tabbar"><button data-view="quiz"><span class="ic">🧠</span>随机试题</button><button data-view="wrong"><span class="ic">📕</span>错题集</button><button data-view="progress" class="active"><span class="ic">📅</span>进度</button><button data-view="handbook"><span class="ic">📚</span>考点手册</button><button data-view="basic"><span class="ic">📖</span>基础</button><button data-view="skill"><span class="ic">🛠</span>技能</button></nav><script>
+</main><nav class="tabbar" id="tabbar"><button data-view="progress" class="active"><span class="ic">📅</span>进度</button><button data-view="handbook"><span class="ic">📚</span>考点手册</button><button data-view="quiz"><span class="ic">🧠</span>随机试题</button><button data-view="wrong"><span class="ic">📕</span>错题集</button><button data-view="basic"><span class="ic">📖</span>基础</button><button data-view="skill"><span class="ic">🛠</span>技能</button></nav><script>
 // 倒计时
 (function(){var d=new Date('2026-12-26T09:00:00');function u(){var n=new Date();var x=Math.ceil((d-n)/86400000);
 var el=document.getElementById('cd');if(el)el.textContent=x>0?('距 12-26 考试还有 '+x+' 天'):'今天考试，加油！';}
@@ -1878,7 +1878,7 @@ u();setInterval(u,3600000);})();
 
 // 右滑返回上一屏（移动端手势）
 (function(){
-  var TAB_ORDER=['quiz','wrong','progress','handbook','basic','skill'];
+  var TAB_ORDER=['progress','handbook','quiz','wrong','basic','skill'];
   function activeView(){
     for(var i=0;i<TAB_ORDER.length;i++){
       var el=document.getElementById('view-'+TAB_ORDER[i]);
